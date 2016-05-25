@@ -14,6 +14,7 @@
 		160E257A1CF459B500A5F828 /* LCS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160E25751CF459B500A5F828 /* LCS.swift */; };
 		160E257B1CF459B500A5F828 /* TableViewDiffAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160E25761CF459B500A5F828 /* TableViewDiffAdapter.swift */; };
 		160E25A41CF4752700A5F828 /* AdapterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160E25A31CF4752700A5F828 /* AdapterType.swift */; };
+		165D96FF1CF5994C0040A48F /* PrototypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165D96FE1CF5994C0040A48F /* PrototypeCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		160E25751CF459B500A5F828 /* LCS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LCS.swift; sourceTree = "<group>"; };
 		160E25761CF459B500A5F828 /* TableViewDiffAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDiffAdapter.swift; sourceTree = "<group>"; };
 		160E25A31CF4752700A5F828 /* AdapterType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdapterType.swift; sourceTree = "<group>"; };
+		165D96FE1CF5994C0040A48F /* PrototypeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrototypeCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 				160E25A31CF4752700A5F828 /* AdapterType.swift */,
 				160E25731CF459B500A5F828 /* CollectionViewDiffAdapter.swift */,
 				160E25761CF459B500A5F828 /* TableViewDiffAdapter.swift */,
+				165D96FE1CF5994C0040A48F /* PrototypeCell.swift */,
 				160E25621CF44C3700A5F828 /* Buffer.h */,
 				160E25641CF44C3700A5F828 /* Info.plist */,
 			);
@@ -150,6 +153,7 @@
 			files = (
 				160E25771CF459B500A5F828 /* BufferDiff.swift in Sources */,
 				160E257B1CF459B500A5F828 /* TableViewDiffAdapter.swift in Sources */,
+				165D96FF1CF5994C0040A48F /* PrototypeCell.swift in Sources */,
 				160E25781CF459B500A5F828 /* CollectionViewDiffAdapter.swift in Sources */,
 				160E257A1CF459B500A5F828 /* LCS.swift in Sources */,
 				160E25791CF459B500A5F828 /* KVO.swift in Sources */,
