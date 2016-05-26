@@ -1,6 +1,6 @@
 //
-//  BufferCollectionView.swift
-//  Buffer
+//  BufferDiffCollectionView.swift
+//  BufferDiff
 //
 //  Created by Alex Usbergo on 25/05/16.
 //  Copyright © 2016 Alex Usbergo. All rights reserved.
@@ -13,7 +13,7 @@
         ///The elements for the table view.
         public var elements = [AnyListItem<Type>]() {
             didSet {
-                self.adapter.bufferDiff.refresh(self.elements)
+                self.adapter.buffer.update(self.elements)
             }
         }
 

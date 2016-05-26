@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  BufferDemo
+//  BufferDiffDemo
 //
 //  Created by Alex Usbergo on 24/05/16.
 //  Copyright © 2016 Alex Usbergo. All rights reserved.

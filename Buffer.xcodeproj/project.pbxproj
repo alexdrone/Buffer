@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		160E25631CF44C3700A5F828 /* Buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 160E25621CF44C3700A5F828 /* Buffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		160E25771CF459B500A5F828 /* BufferDiff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160E25721CF459B500A5F828 /* BufferDiff.swift */; };
+		160E25771CF459B500A5F828 /* Buffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160E25721CF459B500A5F828 /* Buffer.swift */; };
 		160E25781CF459B500A5F828 /* CollectionViewDiffAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160E25731CF459B500A5F828 /* CollectionViewDiffAdapter.swift */; };
 		160E257A1CF459B500A5F828 /* LCS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160E25751CF459B500A5F828 /* LCS.swift */; };
 		160E257B1CF459B500A5F828 /* TableViewDiffAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160E25761CF459B500A5F828 /* TableViewDiffAdapter.swift */; };
@@ -22,7 +22,7 @@
 		160E255F1CF44C3700A5F828 /* Buffer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Buffer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		160E25621CF44C3700A5F828 /* Buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
 		160E25641CF44C3700A5F828 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		160E25721CF459B500A5F828 /* BufferDiff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferDiff.swift; sourceTree = "<group>"; };
+		160E25721CF459B500A5F828 /* Buffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buffer.swift; sourceTree = "<group>"; };
 		160E25731CF459B500A5F828 /* CollectionViewDiffAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDiffAdapter.swift; sourceTree = "<group>"; };
 		160E25751CF459B500A5F828 /* LCS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LCS.swift; sourceTree = "<group>"; };
 		160E25761CF459B500A5F828 /* TableViewDiffAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDiffAdapter.swift; sourceTree = "<group>"; };
@@ -82,7 +82,7 @@
 		1611A8C61CF6361C00DF2493 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				160E25721CF459B500A5F828 /* BufferDiff.swift */,
+				160E25721CF459B500A5F828 /* Buffer.swift */,
 				160E25751CF459B500A5F828 /* LCS.swift */,
 				1611A8C91CF636EF00DF2493 /* AnyListItem.swift */,
 				160E25A31CF4752700A5F828 /* AdapterType.swift */,
@@ -170,7 +170,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				160E25771CF459B500A5F828 /* BufferDiff.swift in Sources */,
+				160E25771CF459B500A5F828 /* Buffer.swift in Sources */,
 				160E257B1CF459B500A5F828 /* TableViewDiffAdapter.swift in Sources */,
 				165D96FF1CF5994C0040A48F /* PrototypeCell.swift in Sources */,
 				160E25781CF459B500A5F828 /* CollectionViewDiffAdapter.swift in Sources */,
