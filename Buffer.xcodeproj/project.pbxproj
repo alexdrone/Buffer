@@ -10,10 +10,11 @@
 		160E25631CF44C3700A5F828 /* Buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 160E25621CF44C3700A5F828 /* Buffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		160E25771CF459B500A5F828 /* BufferDiff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160E25721CF459B500A5F828 /* BufferDiff.swift */; };
 		160E25781CF459B500A5F828 /* CollectionViewDiffAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160E25731CF459B500A5F828 /* CollectionViewDiffAdapter.swift */; };
-		160E25791CF459B500A5F828 /* KVO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160E25741CF459B500A5F828 /* KVO.swift */; };
 		160E257A1CF459B500A5F828 /* LCS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160E25751CF459B500A5F828 /* LCS.swift */; };
 		160E257B1CF459B500A5F828 /* TableViewDiffAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160E25761CF459B500A5F828 /* TableViewDiffAdapter.swift */; };
 		160E25A41CF4752700A5F828 /* AdapterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160E25A31CF4752700A5F828 /* AdapterType.swift */; };
+		1611A8C81CF6365600DF2493 /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1611A8C71CF6365600DF2493 /* TableView.swift */; };
+		1611A8CA1CF636EF00DF2493 /* AnyListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1611A8C91CF636EF00DF2493 /* AnyListItem.swift */; };
 		165D96FF1CF5994C0040A48F /* PrototypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165D96FE1CF5994C0040A48F /* PrototypeCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -23,10 +24,11 @@
 		160E25641CF44C3700A5F828 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		160E25721CF459B500A5F828 /* BufferDiff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferDiff.swift; sourceTree = "<group>"; };
 		160E25731CF459B500A5F828 /* CollectionViewDiffAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDiffAdapter.swift; sourceTree = "<group>"; };
-		160E25741CF459B500A5F828 /* KVO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KVO.swift; sourceTree = "<group>"; };
 		160E25751CF459B500A5F828 /* LCS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LCS.swift; sourceTree = "<group>"; };
 		160E25761CF459B500A5F828 /* TableViewDiffAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDiffAdapter.swift; sourceTree = "<group>"; };
 		160E25A31CF4752700A5F828 /* AdapterType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdapterType.swift; sourceTree = "<group>"; };
+		1611A8C71CF6365600DF2493 /* TableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
+		1611A8C91CF636EF00DF2493 /* AnyListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyListItem.swift; sourceTree = "<group>"; };
 		165D96FE1CF5994C0040A48F /* PrototypeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrototypeCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -60,17 +62,34 @@
 		160E25611CF44C3700A5F828 /* Buffer */ = {
 			isa = PBXGroup;
 			children = (
-				160E25721CF459B500A5F828 /* BufferDiff.swift */,
-				160E25741CF459B500A5F828 /* KVO.swift */,
-				160E25751CF459B500A5F828 /* LCS.swift */,
-				160E25A31CF4752700A5F828 /* AdapterType.swift */,
-				160E25731CF459B500A5F828 /* CollectionViewDiffAdapter.swift */,
-				160E25761CF459B500A5F828 /* TableViewDiffAdapter.swift */,
-				165D96FE1CF5994C0040A48F /* PrototypeCell.swift */,
+				1611A8C61CF6361C00DF2493 /* Core */,
+				1611A8C51CF6361500DF2493 /* UI */,
 				160E25621CF44C3700A5F828 /* Buffer.h */,
 				160E25641CF44C3700A5F828 /* Info.plist */,
 			);
 			path = Buffer;
+			sourceTree = "<group>";
+		};
+		1611A8C51CF6361500DF2493 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				165D96FE1CF5994C0040A48F /* PrototypeCell.swift */,
+				1611A8C71CF6365600DF2493 /* TableView.swift */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
+		1611A8C61CF6361C00DF2493 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				160E25721CF459B500A5F828 /* BufferDiff.swift */,
+				160E25751CF459B500A5F828 /* LCS.swift */,
+				1611A8C91CF636EF00DF2493 /* AnyListItem.swift */,
+				160E25A31CF4752700A5F828 /* AdapterType.swift */,
+				160E25731CF459B500A5F828 /* CollectionViewDiffAdapter.swift */,
+				160E25761CF459B500A5F828 /* TableViewDiffAdapter.swift */,
+			);
+			name = Core;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -156,7 +175,8 @@
 				165D96FF1CF5994C0040A48F /* PrototypeCell.swift in Sources */,
 				160E25781CF459B500A5F828 /* CollectionViewDiffAdapter.swift in Sources */,
 				160E257A1CF459B500A5F828 /* LCS.swift in Sources */,
-				160E25791CF459B500A5F828 /* KVO.swift in Sources */,
+				1611A8CA1CF636EF00DF2493 /* AnyListItem.swift in Sources */,
+				1611A8C81CF6365600DF2493 /* TableView.swift in Sources */,
 				160E25A41CF4752700A5F828 /* AdapterType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -17,13 +17,10 @@ struct FooModel: Equatable {
     let text: String
 }
 
-
-
 class ViewController: UIViewController, UITableViewDelegate {
     
-    lazy var tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.rowHeight = UITableViewAutomaticDimension
+    lazy var tableView: TableView<FooModel> = {
+        let tableView = TableView<FooModel>()
         tableView.delegate = self
         return tableView
     }()
@@ -31,7 +28,10 @@ class ViewController: UIViewController, UITableViewDelegate {
     lazy var elements: [AnyListItem<FooModel>] = {
         var elements = [AnyListItem<FooModel>]()
         for _ in 0...100 {
-            let item = AnyListItem(type: UITableViewCell.self, referenceView: self.tableView, state: FooModel(text: (Lorem.sentences(1)))) { cell, state in
+            let item = AnyListItem(type: UITableViewCell.self,
+                                   referenceView: self.tableView,
+                                   state: FooModel(text: (Lorem.sentences(1)))) {
+                cell, state in
                 guard let cell = cell as? UITableViewCell else { return }
                 cell.textLabel?.text = state.text
             }
@@ -40,10 +40,6 @@ class ViewController: UIViewController, UITableViewDelegate {
         return elements
     }()
 
-    lazy var adapter: TableViewDiffAdapter<AnyListItem<FooModel>> = {
-        return TableViewDiffAdapter(initialElements: self.elements, view: self.tableView)
-    }()
-    
     override func viewDidLayoutSubviews() {
         self.tableView.frame = self.view.bounds
     }
@@ -52,23 +48,20 @@ class ViewController: UIViewController, UITableViewDelegate {
         super.viewDidLoad()
         self.view.addSubview(self.tableView)
         
-        self.adapter.useAsDataSource() { tableView, element, indexPath in
-            let cell = tableView.dequeueReusableCellWithIdentifier(element.reuseIdentifier, forIndexPath: indexPath)
-            element.cellConfiguration?(cell, element.state)
-            return cell
-        }
+        self.tableView.elements = self.elements
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
+
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        var elements = adapter.bufferDiff.elements
-        elements.removeAtIndex(indexPath.row)
-        adapter.bufferDiff.refresh(elements)
+        guard let tableView = tableView as? TableView<FooModel> else {
+            return
+        }
+        var newElements = tableView.elements
+        newElements.removeAtIndex(indexPath.row)
+        tableView.elements = newElements
     }
 }
+
+
+
 
 

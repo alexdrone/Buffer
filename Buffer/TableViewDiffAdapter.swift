@@ -124,7 +124,6 @@
         ///Notifies the receiver that the content updates has ended and the whole array changed.
         public func bufferDiffDidChangeAllContent(bufferDiff: BufferDiffType) {
             self.view?.reloadData()
-            self.view?.endUpdates()
         }
     }
 

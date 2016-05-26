@@ -155,9 +155,9 @@ public class BufferDiff<Element: Equatable>: NSObject, BufferDiffType {
                 //swaps the buffers.
                 self.frontBuffer = backBuffer
                 
-                self.delegate?.bufferDiffWillChangeContent(self)
                 
                 if diff.insertions.count < self.diffThreshold && diff.deletions.count < self.diffThreshold {
+                    self.delegate?.bufferDiffWillChangeContent(self)
                     self.delegate?.bufferDiffDidInsertElementsAtIndices(self, indices: diff.insertions.map({ UInt($0.idx) }))
                     self.delegate?.bufferDiffDidDeleteElementAtIndices(self, indices: diff.deletions.map({ UInt($0.idx) }))
                     self.delegate?.bufferDiffDidChangeContent(self)
