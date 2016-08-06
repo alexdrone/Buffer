@@ -2,8 +2,25 @@
 //  Cell.swift
 //  BufferDiff
 //
-//  Created by Alex Usbergo on 25/05/16.
-//  Copyright © 2016 Alex Usbergo. All rights reserved.
+//  Copyright (c) 2016 Alex Usbergo.
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #if os(iOS)
@@ -11,19 +28,20 @@
     
     public protocol PrototypeViewCell: ListViewCell {
         
-        ///The TableView or CollectionView that owns this cell.
+        /// The TableView or CollectionView that owns this cell.
         var referenceView: ListContainerView? { get set }
 
-        ///Apply the state.
+        // /Apply the state.
         /// - Note: This is used internally from the infra to set the state.
         func applyState<T>(state: T)
         
         init(reuseIdentifier: String)
     }
 
-    public class PrototypeTableViewCell<ViewType: UIView, StateType> : UITableViewCell, PrototypeViewCell {
+    public class PrototypeTableViewCell<ViewType: UIView, StateType> :
+        UITableViewCell, PrototypeViewCell {
 
-        ///The wrapped view
+        /// The wrapped view
         public var view: ViewType!
         
         ///The state for this cell.
@@ -43,7 +61,8 @@
             super.init(style: .Default, reuseIdentifier: reuseIdentifier)
         }
         
-        public func initializeCellIfNecessary(view: ViewType, didSetState: ((StateType?) -> Void)? = nil) {
+        public func initializeCellIfNecessary(view: ViewType,
+                                              didSetState: ((StateType?) -> Void)? = nil) {
             
             assert(NSThread.isMainThread())
 
@@ -68,14 +87,17 @@
             return size
         }
         
-        /// Returns the natural size for the receiving view, considering only properties of the view itself.
-        /// - returns: A size indicating the natural size for the receiving view based on its intrinsic properties.
+        /// Returns the natural size for the receiving view, considering only properties of the 
+        /// view itself.
+        /// - returns: A size indicating the natural size for the receiving view based on its 
+        /// intrinsic properties.
         public override func intrinsicContentSize() -> CGSize {
             return view.intrinsicContentSize()
         }
     }
     
-    public class PrototypeCollectionViewCell<ViewType: UIView, StateType> : UICollectionViewCell, PrototypeViewCell {
+    public class PrototypeCollectionViewCell<ViewType: UIView, StateType> :
+        UICollectionViewCell, PrototypeViewCell {
         
         ///The wrapped view
         public var view: ViewType!
@@ -97,7 +119,8 @@
             super.init(frame: CGRect.zero)
         }
         
-        public func initializeCellIfNecessary(view: ViewType, didSetState: ((StateType?) -> Void)? = nil) {
+        public func initializeCellIfNecessary(view: ViewType,
+                                              didSetState: ((StateType?) -> Void)? = nil) {
             
             assert(NSThread.isMainThread())
             
@@ -122,8 +145,10 @@
             return size
         }
         
-        /// Returns the natural size for the receiving view, considering only properties of the view itself.
-        /// - returns: A size indicating the natural size for the receiving view based on its intrinsic properties.
+        /// Returns the natural size for the receiving view, considering only properties of the 
+        /// view itself.
+        /// - returns: A size indicating the natural size for the receiving view based on its 
+        /// intrinsic properties.
         public override func intrinsicContentSize() -> CGSize {
             return view.intrinsicContentSize()
         }
@@ -143,7 +168,8 @@
             Prototypes.registeredPrototypes[reuseIdentifier] = cell
         }
         
-        ///Computes the size for the cell registered as prototype associate to the item passed as argument.
+        ///Computes the size for the cell registered as prototype associate to the item passed
+        /// as argument.
         /// - parameter item: The target item for size calculation.
         public static func prototypeCellSize<T>(item: AnyListItem<T>) -> CGSize {
             guard let cell = Prototypes.registeredPrototypes[item.reuseIdentifier] else {

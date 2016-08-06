@@ -31,46 +31,47 @@ public protocol BufferType { }
 
 public protocol BufferDelegate: class {
     
-    ///Notifies the receiver that the content is about to change
+    /// Notifies the receiver that the content is about to change
     func bufferWillChangeContent(buffer: BufferType)
     
-    ///Notifies the receiver that rows were deleted.
+    /// Notifies the receiver that rows were deleted.
     func bufferDidDeleteElementAtIndices(buffer: BufferType, indices: [UInt])
     
-    ///Notifies the receiver that rows were inserted.
+    /// Notifies the receiver that rows were inserted.
     func bufferDidInsertElementsAtIndices(buffer: BufferType, indices: [UInt])
 
-    ///Notifies the receiver that the content updates has ended.
+    /// Notifies the receiver that the content updates has ended.
     func bufferDidChangeContent(buffer: BufferType)
     
-    ///Notifies the receiver that the content updates has ended.
-    ///This callback method is called when the number of changes are too many to be 
-    ///handled for the UI thread - it's recommendable to just reload the whole data in this case.
-    ///- Note: The 'diffThreshold' property in 'Buffer' defines what is the maximum number of changes 
-    ///that you want the receiver to be notified for.
+    /// Notifies the receiver that the content updates has ended.
+    /// This callback method is called when the number of changes are too many to be
+    /// handled for the UI thread - it's recommendable to just reload the whole data in this case.
+    /// - Note: The 'diffThreshold' property in 'Buffer' defines what is the maximum number
+    /// of changes
+    /// that you want the receiver to be notified for.
     func bufferDidChangeAllContent(buffer: BufferType)
     
-    ///Called when one of the observed properties for this object changed
+    /// Called when one of the observed properties for this object changed
     func bufferDidChangeElementAtIndex(buffer: BufferType, index: UInt)
 }
 
 public class Buffer<ElementType: Equatable>: NSObject, BufferType {
         
-    ///The object that will get notified every time changes occures to the array.
+    /// The object that will get notified every time changes occures to the array.
     public weak var delegate: BufferDelegate?
     
-    ///The elements in the array observer's buffer.
+    /// The elements in the array observer's buffer.
     public var currentElements: [ElementType] {
         return self.frontBuffer
     }
     
-    ///Defines what is the maximum number of changes that you want the receiver to be notified for.
+    /// Defines what is the maximum number of changes that you want the receiver to be notified for.
     public var diffThreshold = 50
     
-    ///If set to 'true' the LCS algorithm is run synchronously on the main thread.
+    /// If set to 'true' the LCS algorithm is run synchronously on the main thread.
     private var synchronous: Bool = false
     
-    ///The two buffers.
+    /// The two buffers.
     private var frontBuffer = [ElementType]() {
         willSet {
             assert(NSThread.isMainThread())
@@ -83,13 +84,13 @@ public class Buffer<ElementType: Equatable>: NSObject, BufferType {
     }
     private var backBuffer = [ElementType]()
     
-    ///Sort closure.
+    /// Sort closure.
     private var sort: ((ElementType, ElementType) -> Bool)?
     
-    ///Filter closure.
+    /// Filter closure.
     private var filter: ((ElementType) -> Bool)?
     
-    ///The serial operation queue for this controller.
+    /// The serial operation queue for this controller.
     private let serialOperationQueue: NSOperationQueue = {
         let operationQueue = NSOperationQueue()
         operationQueue.maxConcurrentOperationCount = 1
@@ -99,7 +100,7 @@ public class Buffer<ElementType: Equatable>: NSObject, BufferType {
     private var flags = (isRefreshing: false,
                          shouldRefresh: false)
     
-    ///Used if 'Element' is KVO-compliant.
+    /// Used if 'Element' is KVO-compliant.
     private var trackedKeyPaths = [String]()
     
     public init(initialArray: [ElementType],
@@ -115,17 +116,20 @@ public class Buffer<ElementType: Equatable>: NSObject, BufferType {
         self.observeTrackedKeyPaths(false)
     }
     
-    ///Compute the diffs between the current array and the new one passed as argument.
-    public func update(newValues: [ElementType]? = nil, synchronous: Bool = false, completion: ((Void) -> Void)? = nil) {
+    /// Compute the diffs between the current array and the new one passed as argument.
+    public func update(
+        newValues: [ElementType]? = nil,
+        synchronous: Bool = false,
+        completion: ((Void) -> Void)? = nil) {
         
         let new = newValues ?? self.frontBuffer
         
-        //should be called on the main thread
+        // Should be called on the main thread.
         assert(NSThread.isMainThread())
         
         self.backBuffer = new
 
-        //is already refreshing.
+        // Is already refreshing.
         if self.flags.isRefreshing {
             self.flags.shouldRefresh = true
             return
@@ -137,7 +141,7 @@ public class Buffer<ElementType: Equatable>: NSObject, BufferType {
                 
             var backBuffer = self.backBuffer
             
-            //filter and sorts (if necessary).
+            // Filter and sorts (if necessary).
             if let filter = self.filter {
                 backBuffer = backBuffer.filter(filter)
             }
@@ -145,7 +149,7 @@ public class Buffer<ElementType: Equatable>: NSObject, BufferType {
                backBuffer = backBuffer.sort(sort)
             }
             
-            //compute the diff on the background thread.
+            // Compute the diff on the background thread.
             let diff = self.frontBuffer.diff(backBuffer)
             
             self.dispatchOnMainThread(synchronous) {
@@ -154,10 +158,13 @@ public class Buffer<ElementType: Equatable>: NSObject, BufferType {
                 self.frontBuffer = backBuffer
                 
                 
-                if diff.insertions.count < self.diffThreshold && diff.deletions.count < self.diffThreshold {
+                if diff.insertions.count < self.diffThreshold
+                    && diff.deletions.count < self.diffThreshold {
                     self.delegate?.bufferWillChangeContent(self)
-                    self.delegate?.bufferDidInsertElementsAtIndices(self, indices: diff.insertions.map({ UInt($0.idx) }))
-                    self.delegate?.bufferDidDeleteElementAtIndices(self, indices: diff.deletions.map({ UInt($0.idx) }))
+                    self.delegate?.bufferDidInsertElementsAtIndices(
+                        self, indices: diff.insertions.map({ UInt($0.idx) }))
+                    self.delegate?.bufferDidDeleteElementAtIndices(
+                        self, indices: diff.deletions.map({ UInt($0.idx) }))
                     self.delegate?.bufferDidChangeContent(self)
                 } else {
                     self.delegate?.bufferDidChangeAllContent(self)
@@ -175,14 +182,15 @@ public class Buffer<ElementType: Equatable>: NSObject, BufferType {
         }
     }
     
-    ///This message is sent to the receiver when the value at the specified key path relative to the given object has changed.
+    /// This message is sent to the receiver when the value at the specified key path relative
+    /// to the given object has changed.
     public override func observeValueForKeyPath(keyPath: String?,
                                                 ofObject object: AnyObject?,
                                                          change: [String : AnyObject]?,
                                                          context: UnsafeMutablePointer<Void>) {
         
         if context != &__observationContext {
-            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+            super.observeValueForKeyPath(keyPath, ofObject:object, change:change, context:context)
             return
         }
         if self.trackedKeyPaths.contains(keyPath!) {

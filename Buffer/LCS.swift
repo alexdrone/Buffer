@@ -35,11 +35,12 @@ public struct Diff<Type> {
         return results.filter({ !$0.isInsertion }).sort { $0.idx > $1.idx }
     }
     public func reversed() -> Diff<Type> {
-        let reversedResults = self.results.reverse().map { (result: DiffStep<Type>) -> DiffStep<Type> in
-            switch result {
+        let reversedResults = self.results.reverse().map {
+          (result: DiffStep<Type>) -> DiffStep<Type> in
+          switch result {
             case .Insert(let i, let j): return .Delete(i, j)
             case .Delete(let i, let j): return .Insert(i, j)
-            }
+          }
         }
         return Diff<Type>(results: reversedResults)
     }
@@ -101,7 +102,8 @@ public extension Array where Element: Equatable {
     }
     
     /// Walks back through the generated table to generate the diff.
-    private static func diffFromIndices(table: [[Int]], _ x: [Element], _ y: [Element], _ i: Int, _ j: Int) -> Diff<Element> {
+    private static func diffFromIndices(
+        table: [[Int]], _ x: [Element], _ y: [Element], _ i: Int, _ j: Int) -> Diff<Element> {
         
         if i == 0 && j == 0 {
             return Diff<Element>(results: [])
@@ -118,8 +120,8 @@ public extension Array where Element: Equatable {
         }
     }
     
-    /// Applies a generated diff to an array. The following should always be true:
-    /// Given x: [T], y: [T], x.apply(x.diff(y)) == y
+    /// Applies a generated diff to an array.
+    /// Invariant: given x: [T], y: [T], x.apply(x.diff(y)) == y
     private func apply(diff: Diff<Element>) -> Array<Element> {
         var copy = self
         for result in diff.deletions {
@@ -141,7 +143,8 @@ public extension Array where Element: Equatable {
     }
     
     /// Walks back through the generated table to generate the LCS.
-    private static func lcsFromIndices(table: [[Int]], _ x: [Element], _ y: [Element], _ i: Int, _ j: Int) -> [Element] {
+    private static func lcsFromIndices(
+        table: [[Int]], _ x: [Element], _ y: [Element], _ i: Int, _ j: Int) -> [Element] {
         if i == 0 && j == 0 {
             return []
         } else if i == 0 {
