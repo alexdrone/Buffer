@@ -34,11 +34,11 @@ Download and drop ```/Buffer``` folder in your project.
 
 #Getting started 
 
-Buffer is designed to be very granular and not opinionated about the level of abstraction offered to the user.
+Buffer is designed to be very granular and has APIs with very different degrees of abstraction.
 
 ###Managing a collection with Buffer
 
-We can initialize and use **Buffer** in the following way.
+You can initialize and use **Buffer** in the following way.
 
 ```swift
 
@@ -57,7 +57,7 @@ class MyClass: BufferDelegate {
 			// When the elements are changed the buffer object will compute the difference and trigger 
 			// the invocation of the delegate methods.
 			// The `synchronous` and `completion` arguments are optional.
-          		self.buffer.update(newValues, synchronous: false, completion: nil)
+          	self.buffer.update(newValues, synchronous: false, completion: nil)
 		}
 	}
 	
@@ -119,7 +119,7 @@ class MyClass: UITableViewController {
 		// When the elements are changed the buffer object will compute the difference and trigger 
 		// the invocation of the delegate methods.
 		// The `synchronous` and `completion` arguments are optional.
-         		self.buffer.update(newValues, synchronous: false, completion: nil)
+         	self.buffer.update(newValues, synchronous: false, completion: nil)
 	}
 }
 
@@ -188,4 +188,9 @@ class ViewController: UIViewController {
 
 ``` 
 
-See the demo to learn more about Buffer.
+Check the demo out to learn more about Buffer.
+
+###Credits
+
+- The LCS algorithm implementation is inspired from [Dwifft](https://github.com/jflinter/Dwifft) by Jack Flintermann.
+
