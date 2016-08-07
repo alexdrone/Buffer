@@ -157,7 +157,6 @@ public class Buffer<ElementType: Equatable>: NSObject, BufferType {
                 //swaps the buffers.
                 self.frontBuffer = backBuffer
                 
-                
                 if diff.insertions.count < self.diffThreshold
                     && diff.deletions.count < self.diffThreshold {
                     self.delegate?.bufferWillChangeContent(self)

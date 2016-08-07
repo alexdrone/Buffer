@@ -40,6 +40,7 @@ class ViewController: UIViewController, UITableViewDelegate {
         return elements
     }()
 
+
     override func viewDidLayoutSubviews() {
         self.tableView.frame = self.view.bounds
     }
@@ -47,7 +48,6 @@ class ViewController: UIViewController, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(self.tableView)
-        
         self.tableView.elements = self.elements
     }
 

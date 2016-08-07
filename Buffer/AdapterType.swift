@@ -53,7 +53,3 @@ public protocol AdapterType {
     init(buffer: BufferType, view: ViewType)
     init(initialElements: [Type], view: ViewType)
 }
-
-
-
-
