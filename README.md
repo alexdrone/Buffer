@@ -57,7 +57,7 @@ class MyClass: BufferDelegate {
 			// When the elements are changed the buffer object will compute the difference and trigger 
 			// the invocation of the delegate methods.
 			// The `synchronous` and `completion` arguments are optional.
-          	self.buffer.update(newValues, synchronous: false, completion: nil)
+			self.buffer.update(newValues, synchronous: false, completion: nil)
 		}
 	}
 	
@@ -109,9 +109,9 @@ import Buffer
 class MyClass: UITableViewController {
 
 	lazy var buffer: Buffer<Foo> = {
-	// The `sort` and the `filter` closure are optional - they are convenient way to map the src array.
-	let buffer = Buffer(initialArray: self.elements, sort: { $0.bar > $1.bar }, filter: { $0.isBaz })
-	buffer.delegate = self
+		// The `sort` and the `filter` closure are optional - they are convenient way to map the src array.
+		let buffer = Buffer(initialArray: self.elements, sort: { $0.bar > $1.bar }, filter: { $0.isBaz })
+		buffer.delegate = self
 }()	
 
 	var elements: [Foo] = [Foo]() {
@@ -119,7 +119,7 @@ class MyClass: UITableViewController {
 		// When the elements are changed the buffer object will compute the difference and trigger 
 		// the invocation of the delegate methods.
 		// The `synchronous` and `completion` arguments are optional.
-         	self.buffer.update(newValues, synchronous: false, completion: nil)
+		self.buffer.update(newValues, synchronous: false, completion: nil)
 	}
 }
 
@@ -161,15 +161,15 @@ class ViewController: UIViewController {
     lazy var elements: [AnyListItem<FooModel>] = {
         var elements = [AnyListItem<FooModel>]()
         for _ in 0...100 {
-        	   // AnyListItem boxes the data and the configuration for every row in the tableview.
-            let item = AnyListItem(type: UITableViewCell.self,
-                                   referenceView: self.tableView,
-                                   state: FooModel(text: (Lorem.sentences(1)))) {
-                cell, state in
-                guard let cell = cell as? UITableViewCell else { return }
-                cell.textLabel?.text = state.text
-            }
-            elements.append(item)
+			// AnyListItem boxes the data and the configuration for every row in the tableview.
+			let item = AnyListItem(type: UITableViewCell.self,
+			                       referenceView: self.tableView,
+			                       state: FooModel(text: (Lorem.sentences(1)))) {
+			    cell, state in
+			    guard let cell = cell as? UITableViewCell else { return }
+			    cell.textLabel?.text = state.text
+			}
+			elements.append(item)
         }
         return elements
     }()
