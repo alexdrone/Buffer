@@ -190,5 +190,5 @@ Check the demo out to learn more about Buffer.
 
 ###Credits
 
-- The LCS algorithm implementation is inspired from [Dwifft](https://github.com/jflinter/Dwifft) by Jack Flintermann.
+- The LCS algorithm implementation is forked from [Dwifft](https://github.com/jflinter/Dwifft) by Jack Flintermann.
 
