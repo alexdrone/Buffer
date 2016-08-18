@@ -29,7 +29,6 @@ TODO
 #### Manually
 Download and drop ```/Buffer``` folder in your project.  
 
-	import UIKit
 	import Buffer
 
 #Getting started 
@@ -98,7 +97,7 @@ buffer.trackKeyPaths(["foo", "bar.baz"])
 
 ###Built-in UITableView and UICollectionView adapter
 
-One of the main use cases for **Buffer** is probably to apply changes to a tableview or a collectionview.
+One of the main use cases for **Buffer** is probably to apply changes to a TableView or a CollectionView.
 **Buffer** provides 2 adapter classes that implement the `BufferDelegate` protocol and automatically perform the required 
 changes on the target tableview/collectionview when required. 
 
@@ -142,7 +141,7 @@ let adapter: TableViewDiffAdapter<Foo>!
 
 ``` 
 
-###Component-oriented TableView
+###Component-Oriented TableView
 
 Another convenient way to use **Buffer** is through the `Buffer.TableView` class.
 This abstraction allows for the tableView to reconfigure itself when its state (the elements) change.
@@ -164,7 +163,7 @@ class ViewController: UIViewController {
 			// AnyListItem boxes the data and the configuration for every row in the tableview.
 			let item = AnyListItem(type: UITableViewCell.self,
 			                       referenceView: self.tableView,
-			                       state: FooModel(text: (Lorem.sentences(1)))) {
+			                       state: FooModel(text: "Foo"))) {
 			    cell, state in
 			    guard let cell = cell as? UITableViewCell else { return }
 			    cell.textLabel?.text = state.text
@@ -184,7 +183,6 @@ class ViewController: UIViewController {
         self.tableView.elements = self.elements
     }
 }
-
 
 ``` 
 
