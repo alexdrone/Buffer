@@ -46,7 +46,7 @@ import Buffer
 class MyClass: BufferDelegate {
 
 	lazy var buffer: Buffer<Foo> = {
-		// The `sort` and the `filter` closure are optional - they are convenient way to map the src array.
+		// The `sort` and the `filter` closure are optional - they are a convenient way to map the src array.
 		let buffer = Buffer(initialArray: self.elements, sort: { $0.bar > $1.bar }, filter: { $0.isBaz })
 		buffer.delegate = self
 	}()	
