@@ -160,7 +160,7 @@ class ViewController: UIViewController {
     lazy var elements: [AnyListItem<FooModel>] = {
         var elements = [AnyListItem<FooModel>]()
         for _ in 0...100 {
-			// AnyListItem boxes the data and the configuration for every row in the tableview.
+			// AnyListItem wraps the data and the configuration for every row in the tableview.
 			let item = AnyListItem(type: UITableViewCell.self,
 			                       referenceView: self.tableView,
 			                       state: FooModel(text: "Foo"))) {
