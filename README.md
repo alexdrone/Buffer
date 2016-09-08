@@ -20,18 +20,18 @@ To install Carthage, run (using Homebrew):
 
 Then add the following line to your `Cartfile`:
 
-	github "alexdrone/Buffer" "master"    
+	github "alexdrone/Buffer" "master"
 
 
 #### CocoaPods
 TODO
 
 #### Manually
-Download and drop ```/Buffer``` folder in your project.  
+Download and drop ```/Buffer``` folder in your project.
 
 	import Buffer
 
-#Getting started 
+#Getting started
 
 Buffer is designed to be very granular and has APIs with very different degrees of abstraction.
 
@@ -53,7 +53,7 @@ class MyClass: BufferDelegate {
 	
 	var elements: [Foo] = [Foo]() {
 		didSet {
-			// When the elements are changed the buffer object will compute the difference and trigger 
+			// When the elements are changed the buffer object will compute the difference and trigger
 			// the invocation of the delegate methods.
 			// The `synchronous` and `completion` arguments are optional.
 			self.buffer.update(newValues, synchronous: false, completion: nil)
@@ -84,7 +84,7 @@ class MyClass: BufferDelegate {
 	public func bufferDidChangeAllContent(buffer: BufferType) {
 	}
 }
-``` 
+```
 
 ###Tracking Keypaths
 
@@ -93,13 +93,13 @@ When one of the observed keypath changes for one of the items managed by your bu
 
 ```swift
 buffer.trackKeyPaths(["foo", "bar.baz"])
-``` 
+```
 
 ###Built-in UITableView and UICollectionView adapter
 
 One of the main use cases for **Buffer** is probably to apply changes to a TableView or a CollectionView.
-**Buffer** provides 2 adapter classes that implement the `BufferDelegate` protocol and automatically perform the required 
-changes on the target tableview/collectionview when required. 
+**Buffer** provides 2 adapter classes that implement the `BufferDelegate` protocol and automatically perform the required
+changes on the target tableview/collectionview when required.
 
 ```swift
 
@@ -115,7 +115,7 @@ class MyClass: UITableViewController {
 
 	var elements: [Foo] = [Foo]() {
 	didSet {
-		// When the elements are changed the buffer object will compute the difference and trigger 
+		// When the elements are changed the buffer object will compute the difference and trigger
 		// the invocation of the delegate methods.
 		// The `synchronous` and `completion` arguments are optional.
 		self.buffer.update(newValues, synchronous: false, completion: nil)
@@ -128,7 +128,7 @@ let adapter: TableViewDiffAdapter<Foo>!
 		super.init()
 		self.adapter = TableViewDiffAdapter(buffer: self.buffer, view: self.tableView)
 		
-		// Additionaly you can let the adapter be the datasource for your table view by passing a cell 
+		// Additionaly you can let the adapter be the datasource for your table view by passing a cell
 		// configuration closure to the adpater.
 		adapter.useAsDataSource { (tableView, object, indexPath) -> UITableViewCell in
 	 			let cell = tableView.dequeueReusableCellWithIdentifier("MyCell")
@@ -139,7 +139,7 @@ let adapter: TableViewDiffAdapter<Foo>!
 
 }
 
-``` 
+```
 
 ###Component-Oriented TableView
 
@@ -151,12 +151,12 @@ This abstraction allows for the tableView to reconfigure itself when its state (
 import Buffer
 
 class ViewController: UIViewController {
-    
+
     lazy var tableView: TableView<FooModel> = {
         let tableView = TableView<FooModel>()
         return tableView
     }()
-    
+
     lazy var elements: [AnyListItem<FooModel>] = {
         var elements = [AnyListItem<FooModel>]()
         for _ in 0...100 {
@@ -176,7 +176,7 @@ class ViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         self.tableView.frame = self.view.bounds
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(self.tableView)
@@ -184,7 +184,7 @@ class ViewController: UIViewController {
     }
 }
 
-``` 
+```
 
 Check the demo out to learn more about Buffer.
 
