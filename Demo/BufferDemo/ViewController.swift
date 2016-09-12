@@ -42,12 +42,12 @@ class ViewController: UIViewController, UITableViewDelegate {
     self.tableView.elements = self.elements
   }
 
-  func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     guard let tableView = tableView as? TableView<FooModel> else {
       return
     }
     var newElements = tableView.elements
-    newElements.removeAtIndex(indexPath.row)
+    newElements.remove(at: (indexPath as NSIndexPath).row)
     tableView.elements = newElements
   }
 }

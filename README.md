@@ -1,11 +1,12 @@
 # <img src="Doc/logo.png" width="444" alt="Buffer" />
 
-[![Swift](https://img.shields.io/badge/swift-2.2-orange.svg?style=flat)](#)
+[![Swift](https://img.shields.io/badge/swift-3-orange.svg?style=flat)](#)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Platform](https://img.shields.io/badge/platform-ios | macos | tvos | watchos-lightgrey.svg?style=flat)](#)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://opensource.org/licenses/MIT)
 
 Swift μ-framework for efficient array diffs, collection observation and data source implementation.
+[(Swift 2.3 branch here)](https://github.com/alexdrone/Buffer/tree/swift_2_3)
 
 
 ## Installation
@@ -56,32 +57,32 @@ class MyClass: BufferDelegate {
 			// When the elements are changed the buffer object will compute the difference and trigger
 			// the invocation of the delegate methods.
 			// The `synchronous` and `completion` arguments are optional.
-			self.buffer.update(newValues, synchronous: false, completion: nil)
+			self.buffer.update(with: newValues, synchronous: false, completion: nil)
 		}
 	}
 	
 	
 	//These methods will be called when the buffer has changedd.
 
-	public func bufferWillChangeContent(buffer: BufferType) {
+	public func buffer(willChangeContent buffer: BufferType) {
 		//e.g. self.tableView?.beginUpdates()
 
 	}
 	
-	public func bufferDidDeleteElementAtIndices(buffer: BufferType, indices: [UInt]) {
+	public func buffer(didDeleteElementAtIndices buffer: BufferType, indices: [UInt]) {
 		//e.g. Remove rows from a tableview
 	}
 	
-	public func bufferDidInsertElementsAtIndices(buffer: BufferType, indices: [UInt]) {
+	public func buffer(didInsertElementsAtIndices buffer: BufferType, indices: [UInt]) {
 	}
 	
-	public func bufferDidChangeContent(buffer: BufferType) {
+	public func buffer(didChangeContent buffer: BufferType) {
 	}
 	
-	public func bufferDidChangeElementAtIndex(buffer: BufferType, index: UInt) {
+	public func buffer(didChangeElementAtIndex buffer: BufferType, index: UInt) {
 	}
 	
-	public func bufferDidChangeAllContent(buffer: BufferType) {
+	public func buffer(didChangeAllContent buffer: BufferType) {
 	}
 }
 ```
@@ -118,7 +119,7 @@ class MyClass: UITableViewController {
 		// When the elements are changed the buffer object will compute the difference and trigger
 		// the invocation of the delegate methods.
 		// The `synchronous` and `completion` arguments are optional.
-		self.buffer.update(newValues, synchronous: false, completion: nil)
+		self.buffer.update(with: newValues, synchronous: false, completion: nil)
 	}
 }
 

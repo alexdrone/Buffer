@@ -28,11 +28,11 @@ import Foundation
 
 public protocol AdapterType {
 
-  associatedtype Type
+  associatedtype `Type`
   associatedtype ViewType
 
   ///Returns the element currently on the front buffer at the given index path.
-  func displayedElementAtIndex(index: Int) -> Type
+  func displayedElement(at index: Int) -> Type
 
   ///The total number of elements currently displayed.
   func countDisplayedElements() -> Int
@@ -42,7 +42,7 @@ public protocol AdapterType {
   /// - parameter synchronous: Wether the filter, sorting and diff should be executed
   /// synchronously or not.
   /// - parameter completion: Code that will be executed once the buffer is updated.
-  func update(newValues: [Type]?, synchronous: Bool, completion: ((Void) -> Void)?)
+  func update(with values: [Type]?, synchronous: Bool, completion: ((Void) -> Void)?)
 
   ///The section index associated with this adapter.
   var sectionIndex: Int { get set }
