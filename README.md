@@ -8,6 +8,8 @@
 Swift μ-framework for efficient array diffs, collection observation and data source implementation.
 [(Swift 2.3 branch here)](https://github.com/alexdrone/Buffer/tree/swift_2_3)
 
+[C++11 port here](https://github.com/alexdrone/libbuffer)
+
 
 ## Installation
 
