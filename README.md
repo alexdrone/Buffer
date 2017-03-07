@@ -12,22 +12,32 @@ Swift μ-framework for efficient array diffs, collection observation and data so
 
 
 ## Installation
+If you are using **CocoaPods**:
 
-### Carthage
+
+Add the following to your [Podfile](https://guides.cocoapods.org/using/the-podfile.html):
+
+```ruby
+pod 'Buffer', '~> 1.1'
+```
+
+If you are using **Carthage**:
 
 
 To install Carthage, run (using Homebrew):
 
-	$ brew update
-	$ brew install carthage	
+```bash
+$ brew update
+$ brew install carthage
+```
+
 
 Then add the following line to your `Cartfile`:
 
-	github "alexdrone/Buffer" "master"
+```
+github "alexdrone/Buffer" "master"    
+```
 
-
-#### CocoaPods
-TODO
 
 #### Manually
 Download and drop ```/Buffer``` folder in your project.
