@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = "Buffer"
-  s.version          = "2.1"
-  s.summary          = "Swift and UIKit a la React."
+  s.version          = "1.1"
+  s.summary          = "Swift μ-framework for efficient array diffs, collection observation and cell configuration."
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -21,16 +21,16 @@ Pod::Spec.new do |s|
   React-inspired swift library for writing UIKit UIs.
                        DESC
 
-  s.homepage         = "https://github.com/alexdrone/Render"
-  s.screenshots      = "https://github.com/alexdrone/Render/raw/master/Doc/logo.png"
+  s.homepage         = "https://github.com/alexdrone/Buffer"
+  s.screenshots      = "https://github.com/alexdrone/Buffer/raw/master/Doc/logo.png"
   s.license          = 'MIT'
   s.author           = { "Alex Usbergo" => "alexakadrone@gmail.com" }
-  s.source           = { :git => "https://github.com/alexdrone/Render.git", :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/alexdrone/Buffer.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/alexdrone'
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = 'Render/**/*'
+  s.source_files = 'Buffer/**/*'
 
   # s.resource_bundles = {
   #   'Render' => ['Render/Assets/*.png']
