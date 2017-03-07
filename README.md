@@ -39,11 +39,6 @@ github "alexdrone/Buffer" "master"
 ```
 
 
-#### Manually
-Download and drop ```/Buffer``` folder in your project.
-
-	import Buffer
-
 #Getting started
 
 Buffer is designed to be very granular and has APIs with very different degrees of abstraction.
