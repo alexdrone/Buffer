@@ -1,25 +1,3 @@
-//
-//  LCS.swift
-//  BufferDiff
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a copy
-//  of this software and associated documentation files (the "Software"), to deal
-//  in the Software without restriction, including without limitation the rights
-//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//  copies of the Software, and to permit persons to whom the Software is
-//  furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//  THE SOFTWARE.
-//
 //  Originally created by Jack Flintermann on 3/14/15.
 //  Forked from github.com/jflinter/Dwifft
 //  Copyright (c) 2015 jflinter. All rights reserved.
@@ -49,8 +27,9 @@ public func +<Type> (left: Diff<Type>, right: DiffStep<Type>) -> Diff<Type> {
   return Diff<Type>(results: left.results + [right])
 }
 
-/// These get returned from calls to Array.diff().
-/// They represent insertions or deletions that need to happen to transform array A into array A.
+/** These get returned from calls to Array.diff().
+ *  They represent insertions or deletions that need to happen to transform array A into array A.
+ */
 public enum DiffStep<Type>  {
   case insert(Int, Type)
   case delete(Int, Type)
@@ -95,13 +74,13 @@ private struct MemoizedSequenceComparison<Type: Equatable> {
 
 public extension Array where Element: Equatable {
 
-  /// Returns the sequence of ArrayDiffResults required to transform one array into another.
+  /** Returns the sequence of ArrayDiffResults required to transform one array into another. */
   public func diff(_ other: [Element]) -> Diff<Element> {
     let table = MemoizedSequenceComparison.buildTable(self, other, self.count, other.count)
     return Array.diffFromIndices(table, self, other, self.count, other.count)
   }
 
-  /// Walks back through the generated table to generate the diff.
+  /** Walks back through the generated table to generate the diff. */
   fileprivate static func diffFromIndices(
     _ table: [[Int]], _ x: [Element], _ y: [Element], _ i: Int, _ j: Int) -> Diff<Element> {
 
@@ -120,8 +99,9 @@ public extension Array where Element: Equatable {
     }
   }
 
-  /// Applies a generated diff to an array.
-  /// Invariant: given x: [T], y: [T], x.apply(x.diff(y)) == y
+  /** Applies a generated diff to an array.
+   *  Invariant: given x: [T], y: [T], x.apply(x.diff(y)) == y
+   */
   fileprivate func apply(_ diff: Diff<Element>) -> Array<Element> {
     var copy = self
     for result in diff.deletions {
@@ -136,13 +116,13 @@ public extension Array where Element: Equatable {
 
 public extension Array where Element: Equatable {
 
-  /// Returns the longest common subsequence between two arrays.
+  /** Returns the longest common subsequence between two arrays. */
   public func LCS(_ other: [Element]) -> [Element] {
     let table = MemoizedSequenceComparison.buildTable(self, other, self.count, other.count)
     return Array.lcsFromIndices(table, self, other, self.count, other.count)
   }
 
-  /// Walks back through the generated table to generate the LCS.
+  // Walks back through the generated table to generate the LCS.
   fileprivate static func lcsFromIndices(
     _ table: [[Int]], _ x: [Element], _ y: [Element], _ i: Int, _ j: Int) -> [Element] {
     if i == 0 && j == 0 {

@@ -1,78 +1,51 @@
-
-//
-//  Buffer.swift
-//  Buffer
-//
-//  Created by Alex Usbergo on 02/05/16.
-//
-//  Copyright (c) 2016 Alex Usbergo.
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a copy
-//  of this software and associated documentation files (the "Software"), to deal
-//  in the Software without restriction, including without limitation the rights
-//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//  copies of the Software, and to permit persons to whom the Software is
-//  furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//  THE SOFTWARE.
-//
-
 import Foundation
 
 public protocol BufferType { }
 
 public protocol BufferDelegate: class {
 
-  /// Notifies the receiver that the content is about to change
+  /** Notifies the receiver that the content is about to change */
   func buffer(willChangeContent buffer: BufferType)
 
-  /// Notifies the receiver that rows were deleted.
+  /** Notifies the receiver that rows were deleted. */
   func buffer(didDeleteElementAtIndices buffer: BufferType, indices: [UInt])
 
-  /// Notifies the receiver that rows were inserted.
+  /** Notifies the receiver that rows were inserted. */
   func buffer(didInsertElementsAtIndices buffer: BufferType, indices: [UInt])
 
-  /// Notifies the receiver that the content updates has ended.
+  /** Notifies the receiver that the content updates has ended. */
   func buffer(didChangeContent buffer: BufferType)
 
-  /// Notifies the receiver that the content updates has ended.
-  /// This callback method is called when the number of changes are too many to be
-  /// handled for the UI thread - it's recommendable to just reload the whole data in this case.
-  /// - Note: The 'diffThreshold' property in 'Buffer' defines what is the maximum number
-  /// of changes
-  /// that you want the receiver to be notified for.
+  /** Notifies the receiver that the content updates has ended.
+   *  This callback method is called when the number of changes are too many to be
+   *  handled for the UI thread - it's recommendable to just reload the whole data in this case.
+   *  - Note: The 'diffThreshold' property in 'Buffer' defines what is the maximum number
+   *  of changes
+   * that you want the receiver to be notified for.
+   */
   func buffer(didChangeAllContent buffer: BufferType)
 
-  /// Called when one of the observed properties for this object changed
+  /** Called when one of the observed properties for this object changed. */
   func buffer(didChangeElementAtIndex buffer: BufferType, index: UInt)
 }
 
 public class Buffer<ElementType: Equatable>: NSObject, BufferType {
 
-  /// The object that will get notified every time changes occures to the array.
+  /** The object that will get notified every time changes occures to the array. */
   public weak var delegate: BufferDelegate?
 
-  /// The elements in the array observer's buffer.
+  /** The elements in the array observer's buffer. */
   public var currentElements: [ElementType] {
     return self.frontBuffer
   }
 
-  /// Defines what is the maximum number of changes that you want the receiver to be notified for.
+  /** Defines what is the maximum number of changes that you want the receiver to be notified for. */
   public var diffThreshold = 50
 
-  /// If set to 'true' the LCS algorithm is run synchronously on the main thread.
+  // If set to 'true' the LCS algorithm is run synchronously on the main thread.
   fileprivate var synchronous: Bool = false
 
-  /// The two buffers.
+  // The two buffers.
   fileprivate var frontBuffer = [ElementType]() {
     willSet {
       assert(Thread.isMainThread)
@@ -85,13 +58,13 @@ public class Buffer<ElementType: Equatable>: NSObject, BufferType {
   }
   fileprivate var backBuffer = [ElementType]()
 
-  /// Sort closure.
+  // Sort closure.
   fileprivate var sort: ((ElementType, ElementType) -> Bool)?
 
-  /// Filter closure.
+  // Filter closure.
   fileprivate var filter: ((ElementType) -> Bool)?
 
-  /// The serial operation queue for this controller.
+  // The serial operation queue for this controller.
   fileprivate let serialOperationQueue: OperationQueue = {
     let operationQueue = OperationQueue()
     operationQueue.maxConcurrentOperationCount = 1
@@ -101,7 +74,7 @@ public class Buffer<ElementType: Equatable>: NSObject, BufferType {
   fileprivate var flags = (isRefreshing: false,
                        shouldRefresh: false)
 
-  /// Used if 'Element' is KVO-compliant.
+  // Used if 'Element' is KVO-compliant.
   fileprivate var trackedKeyPaths = [String]()
 
   public init(initialArray: [ElementType],
@@ -117,7 +90,7 @@ public class Buffer<ElementType: Equatable>: NSObject, BufferType {
     self.observe(shouldObserveTrackedKeyPaths: false)
   }
 
-  /// Compute the diffs between the current array and the new one passed as argument.
+  /** Compute the diffs between the current array and the new one passed as argument. */
   public func update(
     with values: [ElementType]? = nil,
     synchronous: Bool = false,
@@ -182,8 +155,9 @@ public class Buffer<ElementType: Equatable>: NSObject, BufferType {
     }
   }
 
-  /// This message is sent to the receiver when the value at the specified key path relative
-  /// to the given object has changed.
+  /** This message is sent to the receiver when the value at the specified key path relative
+   *  to the given object has changed.
+   */
   public override func observeValue(forKeyPath keyPath: String?,
                                               of object: Any?,
                                               change: [NSKeyValueChangeKey : Any]?,
@@ -200,11 +174,11 @@ public class Buffer<ElementType: Equatable>: NSObject, BufferType {
   }
 }
 
-//MARK: KVO Extension
+// MARK: KVO Extension
 
 extension Buffer where ElementType: AnyObject {
 
-  ///Observe the keypaths passed as argument.
+  /** Observe the keypaths passed as argument. */
   public func trackKeyPaths(_ keypaths: [String]) {
     self.observe(shouldObserveTrackedKeyPaths: false)
     self.trackedKeyPaths = keypaths
@@ -214,8 +188,9 @@ extension Buffer where ElementType: AnyObject {
 
 extension Buffer {
 
-  /// Adds or remove observations.
-  /// - Note: This code is executed only when 'Element: AnyObject'.
+  /** Adds or remove observations.
+   *  - Note: This code is executed only when 'Element: AnyObject'.
+   */
   fileprivate func observe(shouldObserveTrackedKeyPaths: Bool = true) {
     if self.trackedKeyPaths.count == 0 {
       return
@@ -237,7 +212,7 @@ extension Buffer {
     }
   }
 
-  /// - Note: This code is executed only when 'Element: AnyObject'.
+  // - Note: This code is executed only when 'Element: AnyObject'.
   fileprivate func objectDidChangeValue(for keyPath: String?, in object: AnyObject?) {
     dispatchOnMainThread {
       self.update() {

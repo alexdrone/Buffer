@@ -1,28 +1,3 @@
-//
-//  AnyListItemType.swift
-//  BufferDiff
-//
-//  Copyright (c) 2016 Alex Usbergo.
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a copy
-//  of this software and associated documentation files (the "Software"), to deal
-//  in the Software without restriction, including without limitation the rights
-//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//  copies of the Software, and to permit persons to whom the Software is
-//  furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//  THE SOFTWARE.
-//
-
 import Foundation
 
 public protocol ListContainerView: class { }
@@ -42,13 +17,13 @@ public func ==<Type>(lhs: AnyListItem<Type>, rhs: AnyListItem<Type>) -> Bool {
 
 public struct AnyListItem<Type: Equatable>: Equatable {
 
-  ///The reuse identifier for the cell passed as argument.
+  /** The reuse identifier for the cell passed as argument. */
   public var reuseIdentifier: String
 
-  ///The actual item data.
+  /** The actual item data. */
   public var state: Type
 
-  ///The TableView, or the CollectionView that will own this element.
+  /** The TableView, or the CollectionView that will own this element. */
   public let referenceView: ListContainerView?
 
   public var cellConfiguration: ((ListViewCell, Type) -> Void)?
@@ -61,7 +36,7 @@ public struct AnyListItem<Type: Equatable>: Equatable {
       state: Type,
       configurationClosure: ((ListViewCell, Type) -> Void)? = nil) {
 
-    //registers the prototype cell if necessary.
+    // registers the prototype cell if necessary.
     if !Prototypes.isPrototypeCellRegistered(reuseIdentifer) {
       let cell = V(reuseIdentifier: reuseIdentifer)
       Prototypes.registerPrototypeCell(reuseIdentifer, cell: cell)
