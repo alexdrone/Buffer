@@ -39,11 +39,11 @@ github "alexdrone/Buffer" "master"
 ```
 
 
-#Getting started
+# Getting started
 
 Buffer is designed to be very granular and has APIs with very different degrees of abstraction.
 
-###Managing a collection with Buffer
+### Managing a collection with Buffer
 
 You can initialize and use **Buffer** in the following way.
 
@@ -95,7 +95,7 @@ class MyClass: BufferDelegate {
 
 ```
 
-###Tracking Keypaths
+### Tracking Keypaths
 
 If your model is KVO-compliant, you can pass an array of keypaths to your buffer object.
 When one of the observed keypath changes for one of the items managed by your buffer object, the sort and the filter closures are re-applied (on a background thread), the diff is computed and the delegate methods called.
@@ -104,7 +104,7 @@ When one of the observed keypath changes for one of the items managed by your bu
 buffer.trackKeyPaths(["foo", "bar.baz"])
 ```
 
-###Built-in UITableView and UICollectionView adapter
+### Built-in UITableView and UICollectionView adapter
 
 One of the main use cases for **Buffer** is probably to apply changes to a TableView or a CollectionView.
 **Buffer** provides 2 adapter classes that implement the `BufferDelegate` protocol and automatically perform the required
@@ -151,7 +151,7 @@ class MyClass: UITableViewController {
 
 ```
 
-###Component-Oriented TableView
+### Component-Oriented TableView
 
 Another convenient way to use **Buffer** is through the `Buffer.TableView` class.
 This abstraction allows for the tableView to reconfigure itself when its state (the elements) change.
@@ -199,7 +199,7 @@ class ViewController: UIViewController {
 
 Check the demo out to learn more about Buffer.
 
-###Credits
+### Credits
 
 - The LCS algorithm implementation is forked from [Dwifft](https://github.com/jflinter/Dwifft) by Jack Flintermann.
 
