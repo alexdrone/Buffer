@@ -1,4 +1,4 @@
-# <img src="Doc/logo.png" alt="Buffer" />
+# <img src="docs/logo.png" width="370" alt="Buffer" />
 
 [![Swift](https://img.shields.io/badge/swift-3-orange.svg?style=flat)](#)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
