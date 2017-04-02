@@ -46,7 +46,7 @@
 		160E25551CF44C3700A5F828 = {
 			isa = PBXGroup;
 			children = (
-				160E25611CF44C3700A5F828 /* Buffer */,
+				160E25611CF44C3700A5F828 /* Src */,
 				160E25601CF44C3700A5F828 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -59,15 +59,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		160E25611CF44C3700A5F828 /* Buffer */ = {
+		160E25611CF44C3700A5F828 /* Src */ = {
 			isa = PBXGroup;
 			children = (
 				1611A8C61CF6361C00DF2493 /* Core */,
 				1611A8C51CF6361500DF2493 /* UI */,
-				160E25621CF44C3700A5F828 /* Buffer.h */,
-				160E25641CF44C3700A5F828 /* Info.plist */,
 			);
-			path = Buffer;
+			name = Src;
 			sourceTree = "<group>";
 		};
 		1611A8C51CF6361500DF2493 /* UI */ = {
@@ -77,6 +75,7 @@
 				1611A8C71CF6365600DF2493 /* TableView.swift */,
 			);
 			name = UI;
+			path = src;
 			sourceTree = "<group>";
 		};
 		1611A8C61CF6361C00DF2493 /* Core */ = {
@@ -88,8 +87,11 @@
 				160E25A31CF4752700A5F828 /* AdapterType.swift */,
 				160E25731CF459B500A5F828 /* CollectionViewDiffAdapter.swift */,
 				160E25761CF459B500A5F828 /* TableViewDiffAdapter.swift */,
+				160E25621CF44C3700A5F828 /* Buffer.h */,
+				160E25641CF44C3700A5F828 /* Info.plist */,
 			);
 			name = Core;
+			path = src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -284,7 +286,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Buffer/Info.plist;
+				INFOPLIST_FILE = src/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.s.Buffer;
@@ -303,7 +305,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Buffer/Info.plist;
+				INFOPLIST_FILE = src/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.s.Buffer;
