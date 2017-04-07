@@ -43,6 +43,7 @@ github "alexdrone/Buffer" "master"
 
 Buffer is designed to be very granular and has APIs with very different degrees of abstraction.
 
+
 ### Managing a collection with Buffer
 
 You can initialize and use **Buffer** in the following way.
