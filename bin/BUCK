@@ -1,0 +1,7 @@
+prebuilt_apple_framework(
+  name = 'Buffer',
+  framework = 'Buffer.framework',
+  visibility = [
+    'PUBLIC'
+  ]
+)
