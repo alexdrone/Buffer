@@ -17,10 +17,10 @@ class ViewController: UIViewController, UITableViewDelegate {
     return tableView
   }()
 
-  lazy var elements: [AnyListItem<FooModel>] = {
-    var elements = [AnyListItem<FooModel>]()
+  lazy var elements: [ListItem<FooModel>] = {
+    var elements = [ListItem<FooModel>]()
     for _ in 0...100 {
-      let item = AnyListItem(type: UITableViewCell.self,
+      let item = ListItem(type: UITableViewCell.self,
                              container: self.tableView,
                              state: FooModel(text: (Lorem.sentences(1)))) {
         cell, state in
