@@ -11,20 +11,70 @@ public protocol ListViewCell: class { }
   extension UICollectionViewCell: ListViewCell { }
 #endif
 
-public func ==<Type>(lhs: AnyListItem<Type>, rhs: AnyListItem<Type>) -> Bool {
+public struct AnyListItem: ListItemType, Equatable {
+
+  public var reuseIdentifier: String {
+    get { return self.ref.reuseIdentifier }
+    set { self.ref.reuseIdentifier = newValue }
+  }
+  public var uniqueIdentifier: String? {
+    get { return self.ref.uniqueIdentifier }
+    set { self.ref.uniqueIdentifier = newValue }
+  }
+  public var referenceView: ListContainerView? {
+    return self.ref.referenceView
+  }
+  public var stateRef: Any? {
+    return self.ref.stateRef
+  }
+
+  public var ref: ListItemType
+  init(ref: ListItemType) {
+    self.ref = ref
+  }
+
+  public func configure(cell: ListViewCell) {
+    self.ref.configure(cell: cell)
+  }
+}
+
+public func ==(lhs: AnyListItem, rhs: AnyListItem) -> Bool {
+  return lhs.reuseIdentifier == rhs.reuseIdentifier
+         && lhs.uniqueIdentifier == rhs.uniqueIdentifier
+}
+
+public func ==<Type>(lhs: ListItem<Type>, rhs: ListItem<Type>) -> Bool {
   return lhs.reuseIdentifier == rhs.reuseIdentifier && lhs.state == rhs.state
 }
 
-public struct AnyListItem<Type: Equatable>: Equatable {
+public protocol ListItemType {
 
   /** The reuse identifier for the cell passed as argument. */
+  var reuseIdentifier: String { get set }
+
+  /** The unique identifier for this item. */
+  var uniqueIdentifier: String? { get set }
+
+  /** The TableView, or the CollectionView that will own this element. */
+  var referenceView: ListContainerView? { get }
+
+  var stateRef: Any? { get }
+
+  /** Configure the cell with the current item. */
+  func configure(cell: ListViewCell)
+}
+
+public class ListItem<Type: Equatable>: Equatable, ListItemType {
+
   public var reuseIdentifier: String
+  public var uniqueIdentifier: String?
+  public let referenceView: ListContainerView?
 
   /** The actual item data. */
   public var state: Type
-
-  /** The TableView, or the CollectionView that will own this element. */
-  public let referenceView: ListContainerView?
+  public var stateRef: Any? {
+    return self.state
+  }
 
   public var cellConfiguration: ((ListViewCell, Type) -> Void)?
 
@@ -33,6 +83,7 @@ public struct AnyListItem<Type: Equatable>: Equatable {
       type: V.Type,
       container: ListContainerView,
       reuseIdentifer: String = String(describing: V.self),
+      id: String? = nil,
       state: Type,
       configurationClosure: ((V, Type) -> Void)? = nil) {
 
@@ -48,6 +99,7 @@ public struct AnyListItem<Type: Equatable>: Equatable {
         return closure(cell as! V, type)
       }
     }
+    self.uniqueIdentifier = id
     self.referenceView = container
     self.state = state
     self.registerReferenceView(with: type)
@@ -58,6 +110,7 @@ public struct AnyListItem<Type: Equatable>: Equatable {
       type: V.Type,
       container: ListContainerView? = nil,
       reuseIdentifer: String = String(describing: V.self),
+      id: String? = nil,
       state: Type,
       configurationClosure: ((V, Type) -> Void)? = nil) {
 
@@ -67,6 +120,7 @@ public struct AnyListItem<Type: Equatable>: Equatable {
         return closure(cell as! V, type)
       }
     }
+    self.uniqueIdentifier = id
     self.referenceView = container
     self.state = state
     self.registerReferenceView(with: type)
@@ -81,5 +135,10 @@ public struct AnyListItem<Type: Equatable>: Equatable {
         collectionView.register(cellClass, forCellWithReuseIdentifier: self.reuseIdentifier)
       }
     #endif
+  }
+
+  public func configure(cell: ListViewCell) {
+
+    self.cellConfiguration?(cell,  self.state)
   }
 }

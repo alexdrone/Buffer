@@ -9,18 +9,17 @@ public protocol PrototypeViewCell: ListViewCell {
   /** Apply the state.
    *  - Note: This is used internally from the infra to set the state. 
    */
-  func applyState<T>(_ state: T)
+  func applyState(_ state: Any?)
 
   init(reuseIdentifier: String)
 }
 
-open class PrototypeTableViewCell<ViewType: UIView, StateType> : UITableViewCell,
-                                                                 PrototypeViewCell {
+open class PrototypeTableViewCell : UITableViewCell, PrototypeViewCell {
 
   /** The wrapped view. */
-  open var view: ViewType!
+  open var view: UIView!
 
-  open var state: StateType? {
+  open var state: Any? {
     didSet {
       didSetStateClosure?(state)
     }
@@ -28,7 +27,7 @@ open class PrototypeTableViewCell<ViewType: UIView, StateType> : UITableViewCell
 
   open weak var referenceView: ListContainerView?
   fileprivate var didInitializeCell = false
-  fileprivate var didSetStateClosure: ((StateType?) -> Void)?
+  fileprivate var didSetStateClosure: ((Any?) -> Void)?
 
   public required init(reuseIdentifier: String) {
     super.init(style: .default, reuseIdentifier: reuseIdentifier)
@@ -38,8 +37,8 @@ open class PrototypeTableViewCell<ViewType: UIView, StateType> : UITableViewCell
       fatalError("init(coder:) has not been implemented")
   }
 
-  open func initializeCellIfNecessary(_ view: ViewType,
-                                        didSetState: ((StateType?) -> Void)? = nil) {
+  open func initializeCellIfNecessary(_ view: UIView,
+                                        didSetState: ((Any?) -> Void)? = nil) {
 
     assert(Thread.isMainThread)
 
@@ -52,8 +51,9 @@ open class PrototypeTableViewCell<ViewType: UIView, StateType> : UITableViewCell
     self.didSetStateClosure = didSetState
   }
 
-  open func applyState<T>(_ state: T) {
-    self.state = state as? StateType
+  open func applyState(_ state: Any?) {
+    guard let state = state else { return }
+    self.state = state
   }
 
   /** Asks the view to calculate and return the size that best fits the specified size.
@@ -75,15 +75,14 @@ open class PrototypeTableViewCell<ViewType: UIView, StateType> : UITableViewCell
   }
 }
 
-open class PrototypeCollectionViewCell<ViewType: UIView, StateType> :
-UICollectionViewCell, PrototypeViewCell {
+open class PrototypeCollectionViewCell: UICollectionViewCell, PrototypeViewCell {
 
   ///The wrapped view.
-  open var view: ViewType!
+  open var view: UIView!
 
   ///The state for this cell.
   /// - Note: This is propagated to the associted.
-  open var state: StateType? {
+  open var state: Any? {
     didSet {
       didSetStateClosure?(state)
     }
@@ -92,7 +91,7 @@ UICollectionViewCell, PrototypeViewCell {
   weak open var referenceView: ListContainerView?
 
   fileprivate var didInitializeCell = false
-  fileprivate var didSetStateClosure: ((StateType?) -> Void)?
+  fileprivate var didSetStateClosure: ((Any?) -> Void)?
 
   public required init(reuseIdentifier: String) {
     super.init(frame: CGRect.zero)
@@ -102,8 +101,8 @@ UICollectionViewCell, PrototypeViewCell {
       fatalError("init(coder:) has not been implemented")
   }
 
-  open func initializeCellIfNecessary(_ view: ViewType,
-                                        didSetState: ((StateType?) -> Void)? = nil) {
+  open func initializeCellIfNecessary(_ view: UIView,
+                                        didSetState: ((Any?) -> Void)? = nil) {
 
     assert(Thread.isMainThread)
 
@@ -116,8 +115,8 @@ UICollectionViewCell, PrototypeViewCell {
     self.didSetStateClosure = didSetState
   }
 
-  open func applyState<T>(_ state: T) {
-    self.state = state as? StateType
+  open func applyState(_ state: Any?) {
+    self.state = state
   }
 
   /** Asks the view to calculate and return the size that best fits the specified size.
@@ -157,14 +156,14 @@ public struct Prototypes {
    *  as argument.
    *  - parameter item: The target item for size calculation.
    */
-  public static func prototypeCellSize<T>(_ item: AnyListItem<T>) -> CGSize {
+  public static func prototypeCellSize(_ item: ListItemType) -> CGSize {
     guard let cell = Prototypes.registeredPrototypes[item.reuseIdentifier] else {
       fatalError("Unregistered prototype with reuse identifier \(item.reuseIdentifier).")
     }
 
-    cell.applyState(item.state)
+    cell.applyState(item.stateRef)
     cell.referenceView = item.referenceView
-    item.cellConfiguration?(cell, item.state)
+    item.configure(cell: cell)
 
     if let cell = cell as? UIView {
       return cell.bounds.size

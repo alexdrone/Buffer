@@ -4,15 +4,15 @@ import UIKit
 open class TableView<Type: Equatable>: UITableView {
 
   /** The elements for the table view. */
-  open var elements = [AnyListItem<Type>]() {
+  open var elements = [ListItem<Type>]() {
     didSet {
       self.adapter.buffer.update(with: self.elements)
     }
   }
 
   /** The adapter for this table view. */
-  open lazy var adapter: TableViewDiffAdapter<AnyListItem<Type>> = {
-    return TableViewDiffAdapter(initialElements: [AnyListItem<Type>](), view: self)
+  open lazy var adapter: TableViewDiffAdapter<ListItem<Type>> = {
+    return TableViewDiffAdapter(initialElements: [ListItem<Type>](), view: self)
   }()
 
   public convenience init() {

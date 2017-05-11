@@ -21,17 +21,15 @@ class ViewController: UIViewController, UITableViewDelegate {
     var elements = [AnyListItem<FooModel>]()
     for _ in 0...100 {
       let item = AnyListItem(type: UITableViewCell.self,
-                             referenceView: self.tableView,
+                             container: self.tableView,
                              state: FooModel(text: (Lorem.sentences(1)))) {
         cell, state in
-        guard let cell = cell as? UITableViewCell else { return }
         cell.textLabel?.text = state.text
       }
       elements.append(item)
     }
     return elements
   }()
-
 
   override func viewDidLayoutSubviews() {
     self.tableView.frame = self.view.bounds
