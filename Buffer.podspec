@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "Buffer"
-  s.version          = "1.3"
+  s.version          = "1.4"
   s.summary          = "Swift μ-framework for efficient array diffs, collection observation and cell configuration."
 
 # This description is used to generate tags and improve search results.
