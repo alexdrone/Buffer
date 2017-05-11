@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "Buffer"
-  s.version          = "1.2"
+  s.version          = "1.3"
   s.summary          = "Swift μ-framework for efficient array diffs, collection observation and cell configuration."
 
 # This description is used to generate tags and improve search results.
@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
                        DESC
 
   s.homepage         = "https://github.com/alexdrone/Buffer"
-  s.screenshots      = "https://github.com/alexdrone/Buffer/raw/master/Doc/logo.png"
+  s.screenshots      = "https://github.com/alexdrone/Buffer/raw/master/docs/logo.png"
   s.license          = 'MIT'
   s.author           = { "Alex Usbergo" => "alexakadrone@gmail.com" }
   s.source           = { :git => "https://github.com/alexdrone/Buffer.git", :tag => s.version.to_s }
