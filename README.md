@@ -18,7 +18,7 @@ If you are using **CocoaPods**:
 Add the following to your [Podfile](https://guides.cocoapods.org/using/the-podfile.html):
 
 ```ruby
-pod 'Buffer', '~> 1.1'
+pod 'Buffer', '~> 1.3'
 ```
 
 If you are using **Carthage**:
@@ -168,16 +168,15 @@ class ViewController: UIViewController {
     return tableView
   }()
 
-  lazy var elements: [AnyListItem<FooModel>] = {
-    var elements = [AnyListItem<FooModel>]()
+  lazy var elements: [ListItem<FooModel>] = {
+    var elements = [ListItem<FooModel>]()
     for _ in 0...100 {
       // AnyListItem wraps the data and the configuration for every row in the tableview.
-      let item = AnyListItem(type: UITableViewCell.self,
-                             referenceView: self.tableView,
-                             state: FooModel(text: "Foo"))) {
-                              cell, state in
-                              guard let cell = cell as? UITableViewCell else { return }
-                              cell.textLabel?.text = state.text
+      let item = ListItem(type: UITableViewCell.self,
+                          container: self.tableView,
+                          state: FooModel(text: "Foo"))) {
+        cell, state in
+        cell.textLabel?.text = state.text
       }
       elements.append(item)
     }
