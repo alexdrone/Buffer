@@ -22,7 +22,8 @@ class ViewController: UIViewController, UITableViewDelegate {
     for _ in 0...100 {
       let item = AnyListItem(type: UITableViewCell.self,
                              referenceView: self.tableView,
-                             state: FooModel(text: (Lorem.sentences(1)))) { cell, state in
+                             state: FooModel(text: (Lorem.sentences(1)))) {
+        cell, state in
         guard let cell = cell as? UITableViewCell else { return }
         cell.textLabel?.text = state.text
       }

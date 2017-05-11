@@ -1,14 +1,13 @@
 #if os(iOS)
 import UIKit
 
-open class CollectionViewDiffAdapter<ElementType: Equatable>:
-    NSObject, AdapterType, UICollectionViewDataSource {
+open class CollectionViewDiffAdapter<ElementType: Equatable>: NSObject,
+                                                              AdapterType,
+                                                              UICollectionViewDataSource {
 
   public typealias `Type` = ElementType
   public typealias ViewType = UICollectionView
-
   open fileprivate(set) var buffer: Buffer<ElementType>
-
   open fileprivate(set) weak var view: ViewType?
 
   /** Right now this only works on a single section of a collectionView.
@@ -83,8 +82,9 @@ open class CollectionViewDiffAdapter<ElementType: Equatable>:
   /** Asks the data source for a cell to insert in a particular location of the table view. */
   open func collectionView(_ collectionView: UICollectionView,
                            cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    return self.cellForItemAtIndexPath!(
-        collectionView, self.buffer.currentElements[(indexPath as NSIndexPath).row], indexPath)
+    return self.cellForItemAtIndexPath!(collectionView,
+                                        buffer.currentElements[(indexPath as NSIndexPath).row],
+                                        indexPath)
   }
 }
 
@@ -114,7 +114,7 @@ extension CollectionViewDiffAdapter: BufferDelegate {
     self.view?.performBatchUpdates({
       self.view?.insertItems(at: self.indexPaths.insertion)
       self.view?.deleteItems(at: self.indexPaths.deletion)
-      }, completion: nil)
+    }, completion: nil)
   }
 
   /** Called when one of the observed properties for this object changed. */

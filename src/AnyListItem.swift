@@ -31,10 +31,10 @@ public struct AnyListItem<Type: Equatable>: Equatable {
   #if os(iOS)
   public init<V: PrototypeViewCell>(
       type: V.Type,
-      referenceView: ListContainerView,
+      container: ListContainerView,
       reuseIdentifer: String = String(describing: V.self),
       state: Type,
-      configurationClosure: ((ListViewCell, Type) -> Void)? = nil) {
+      configurationClosure: ((V, Type) -> Void)? = nil) {
 
     // registers the prototype cell if necessary.
     if !Prototypes.isPrototypeCellRegistered(reuseIdentifer) {
@@ -43,8 +43,12 @@ public struct AnyListItem<Type: Equatable>: Equatable {
     }
 
     self.reuseIdentifier = reuseIdentifer
-    self.cellConfiguration = configurationClosure
-    self.referenceView = referenceView
+    if let closure = configurationClosure {
+      self.cellConfiguration = { cell, type in
+        return closure(cell as! V, type)
+      }
+    }
+    self.referenceView = container
     self.state = state
     self.registerReferenceView(with: type)
   }
@@ -52,14 +56,18 @@ public struct AnyListItem<Type: Equatable>: Equatable {
 
   public init<V: ListViewCell>(
       type: V.Type,
-      referenceView: ListContainerView? = nil,
+      container: ListContainerView? = nil,
       reuseIdentifer: String = String(describing: V.self),
       state: Type,
-      configurationClosure: ((ListViewCell, Type) -> Void)? = nil) {
+      configurationClosure: ((V, Type) -> Void)? = nil) {
 
     self.reuseIdentifier = reuseIdentifer
-    self.cellConfiguration = configurationClosure
-    self.referenceView = referenceView
+    if let closure = configurationClosure {
+      self.cellConfiguration = { cell, type in
+        return closure(cell as! V, type)
+      }
+    }
+    self.referenceView = container
     self.state = state
     self.registerReferenceView(with: type)
   }
@@ -67,12 +75,10 @@ public struct AnyListItem<Type: Equatable>: Equatable {
   fileprivate func registerReferenceView(with cellClass: AnyClass) {
     #if os(iOS)
       if let tableView = self.referenceView as? UITableView {
-        tableView.register(cellClass,
-                                forCellReuseIdentifier: self.reuseIdentifier)
+        tableView.register(cellClass, forCellReuseIdentifier: self.reuseIdentifier)
       }
       if let collectionView = self.referenceView as? UICollectionView {
-        collectionView.register(cellClass,
-                                     forCellWithReuseIdentifier: self.reuseIdentifier)
+        collectionView.register(cellClass, forCellWithReuseIdentifier: self.reuseIdentifier)
       }
     #endif
   }

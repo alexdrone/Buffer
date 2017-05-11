@@ -28,7 +28,8 @@ public func +<Type> (left: Diff<Type>, right: DiffStep<Type>) -> Diff<Type> {
 }
 
 /** These get returned from calls to Array.diff().
- *  They represent insertions or deletions that need to happen to transform array A into array A.
+ *  They represent insertions or deletions that need to happen to transform array A 
+ *  into array A.
  */
 public enum DiffStep<Type>  {
   case insert(Int, Type)

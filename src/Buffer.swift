@@ -132,7 +132,7 @@ public class Buffer<ElementType: Equatable>: NSObject, BufferType {
         self.frontBuffer = backBuffer
 
         if diff.insertions.count < self.diffThreshold
-          && diff.deletions.count < self.diffThreshold {
+           && diff.deletions.count < self.diffThreshold {
           self.delegate?.buffer(willChangeContent: self)
           self.delegate?.buffer(didInsertElementsAtIndices: self,
                                 indices: diff.insertions.map({ UInt($0.idx) }))

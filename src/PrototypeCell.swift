@@ -14,8 +14,8 @@ public protocol PrototypeViewCell: ListViewCell {
   init(reuseIdentifier: String)
 }
 
-open class PrototypeTableViewCell<ViewType: UIView, StateType> :
-UITableViewCell, PrototypeViewCell {
+open class PrototypeTableViewCell<ViewType: UIView, StateType> : UITableViewCell,
+                                                                 PrototypeViewCell {
 
   /** The wrapped view. */
   open var view: ViewType!
@@ -26,8 +26,7 @@ UITableViewCell, PrototypeViewCell {
     }
   }
 
-  weak open var referenceView: ListContainerView?
-
+  open weak var referenceView: ListContainerView?
   fileprivate var didInitializeCell = false
   fileprivate var didSetStateClosure: ((StateType?) -> Void)?
 
@@ -150,7 +149,7 @@ public struct Prototypes {
   }
 
   /** Register a cell a prototype for a given reuse identifer. */
-  public static func registerPrototypeCell(_ reuseIdentifier: String, cell: PrototypeViewCell) {
+  public static func registerPrototypeCell(_ reuseIdentifier: String, cell: PrototypeViewCell){
     Prototypes.registeredPrototypes[reuseIdentifier] = cell
   }
 

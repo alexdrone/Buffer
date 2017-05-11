@@ -1,14 +1,13 @@
 #if os(iOS)
 import UIKit
 
-open class TableViewDiffAdapter<ElementType: Equatable>:
-    NSObject, AdapterType, UITableViewDataSource {
+open class TableViewDiffAdapter<ElementType: Equatable>: NSObject,
+                                                         AdapterType,
+                                                         UITableViewDataSource {
 
   public typealias `Type` = ElementType
   public typealias ViewType = UITableView
-
   open fileprivate(set) var buffer: Buffer<ElementType>
-
   open fileprivate(set) weak var view: ViewType?
 
   /** Right now this only works on a single section of a tableView.
@@ -81,8 +80,9 @@ open class TableViewDiffAdapter<ElementType: Equatable>:
   /** Asks the data source for a cell to insert in a particular location of the table view. */
   open func tableView(_ tableView: UITableView,
                       cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    return self.cellForRowAtIndexPath!(
-        tableView, self.buffer.currentElements[(indexPath as NSIndexPath).row], indexPath)
+    return self.cellForRowAtIndexPath!(tableView,
+                                       buffer.currentElements[(indexPath as NSIndexPath).row],
+                                       indexPath)
   }
 }
 

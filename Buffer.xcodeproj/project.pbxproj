@@ -46,7 +46,7 @@
 		160E25551CF44C3700A5F828 = {
 			isa = PBXGroup;
 			children = (
-				160E25611CF44C3700A5F828 /* Src */,
+				160E25611CF44C3700A5F828 /* src */,
 				160E25601CF44C3700A5F828 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -59,13 +59,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		160E25611CF44C3700A5F828 /* Src */ = {
+		160E25611CF44C3700A5F828 /* src */ = {
 			isa = PBXGroup;
 			children = (
 				1611A8C61CF6361C00DF2493 /* Core */,
 				1611A8C51CF6361500DF2493 /* UI */,
 			);
-			name = Src;
+			name = src;
 			sourceTree = "<group>";
 		};
 		1611A8C51CF6361500DF2493 /* UI */ = {
