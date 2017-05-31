@@ -23,6 +23,7 @@ open class TableView<Type: Equatable>: UITableView {
     super.init(frame: frame, style: style)
 
     self.rowHeight = UITableViewAutomaticDimension
+    self.estimatedRowHeight = 64
     self.adapter.useAsDataSource() { tableView, item, indexPath in
       let cell = tableView.dequeueReusableCell(
         withIdentifier: item.reuseIdentifier, for: indexPath as IndexPath)
