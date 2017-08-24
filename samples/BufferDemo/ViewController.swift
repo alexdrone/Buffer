@@ -5,7 +5,10 @@ func ==(lhs: FooModel, rhs: FooModel) -> Bool {
   return lhs.text == rhs.text
 }
 
-struct FooModel: Equatable {
+struct FooModel: Diffable {
+  var diffIdentifier: String {
+    return text
+  }
   let text: String
 }
 
@@ -19,12 +22,11 @@ class ViewController: UIViewController, UITableViewDelegate {
 
   lazy var elements: [ListItem<FooModel>] = {
     var elements = [ListItem<FooModel>]()
-    for _ in 0...100 {
+    for i in 0...100 {
       let item = ListItem(type: UITableViewCell.self,
-                             container: self.tableView,
-                             state: FooModel(text: (Lorem.sentences(1)))) {
-        cell, state in
-        cell.textLabel?.text = state.text
+                          container: self.tableView,
+                          model: FooModel(text: ("\(i)"))) { cell, model in
+                            cell.textLabel?.text = model.text
       }
       elements.append(item)
     }
@@ -46,7 +48,10 @@ class ViewController: UIViewController, UITableViewDelegate {
       return
     }
     var newElements = tableView.elements
-    newElements.remove(at: (indexPath as NSIndexPath).row)
+    let index: Int = (indexPath as NSIndexPath).row
+    let element = newElements[index]
+    newElements.remove(at: index)
+    newElements.insert(element, at: 0)
     tableView.elements = newElements
   }
 }

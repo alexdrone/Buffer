@@ -1,11 +1,3 @@
-//
-//  Lorem.swift
-//  BufferDiffDemo
-//
-//  Created by Alex Usbergo on 24/05/16.
-//  Copyright © 2016 Alex Usbergo. All rights reserved.
-//
-
 import Foundation
 
 open class Lorem {
@@ -161,3 +153,4 @@ extension String {
   }
 
 }
+

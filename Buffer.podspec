@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "Buffer"
-  s.version          = "1.5"
+  s.version          = "2.0"
   s.summary          = "Swift μ-framework for efficient array diffs, collection observation and cell configuration."
 
 # This description is used to generate tags and improve search results.
@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-  React-inspired swift library for writing UIKit UIs.
+  Swift μ-framework for efficient array diffs, collection observation and data source implementation
                        DESC
 
   s.homepage         = "https://github.com/alexdrone/Buffer"
@@ -32,9 +32,4 @@ Pod::Spec.new do |s|
 
   s.source_files = 'src/**/*'
 
-
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
 end

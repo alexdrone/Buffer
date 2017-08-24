@@ -6,10 +6,10 @@ public protocol PrototypeViewCell: ListViewCell {
   /** The TableView or CollectionView that owns this cell. */
   var referenceView: ListContainerView? { get set }
 
-  /** Apply the state.
-   *  - Note: This is used internally from the infra to set the state. 
+  /** Apply the model.
+   *  - Note: This is used internally from the infra to set the model. 
    */
-  func applyState(_ state: Any?)
+  func applyModel(_ model: Any?)
 
   init(reuseIdentifier: String)
 }
@@ -19,15 +19,15 @@ open class PrototypeTableViewCell : UITableViewCell, PrototypeViewCell {
   /** The wrapped view. */
   open var view: UIView!
 
-  open var state: Any? {
+  open var model: Any? {
     didSet {
-      didSetStateClosure?(state)
+      didSetModelClosure?(model)
     }
   }
 
   open weak var referenceView: ListContainerView?
   fileprivate var didInitializeCell = false
-  fileprivate var didSetStateClosure: ((Any?) -> Void)?
+  fileprivate var didSetModelClosure: ((Any?) -> Void)?
 
   public required init(reuseIdentifier: String) {
     super.init(style: .default, reuseIdentifier: reuseIdentifier)
@@ -38,7 +38,7 @@ open class PrototypeTableViewCell : UITableViewCell, PrototypeViewCell {
   }
 
   open func initializeCellIfNecessary(_ view: UIView,
-                                        didSetState: ((Any?) -> Void)? = nil) {
+                                        didSetModel: ((Any?) -> Void)? = nil) {
 
     assert(Thread.isMainThread)
 
@@ -48,12 +48,12 @@ open class PrototypeTableViewCell : UITableViewCell, PrototypeViewCell {
 
     self.view = view
     self.contentView.addSubview(view)
-    self.didSetStateClosure = didSetState
+    self.didSetModelClosure = didSetModel
   }
 
-  open func applyState(_ state: Any?) {
-    guard let state = state else { return }
-    self.state = state
+  open func applyModel(_ model: Any?) {
+    guard let model = model else { return }
+    self.model = model
   }
 
   /** Asks the view to calculate and return the size that best fits the specified size.
@@ -80,18 +80,18 @@ open class PrototypeCollectionViewCell: UICollectionViewCell, PrototypeViewCell 
   ///The wrapped view.
   open var view: UIView!
 
-  ///The state for this cell.
+  ///The model for this cell.
   /// - Note: This is propagated to the associted.
-  open var state: Any? {
+  open var model: Any? {
     didSet {
-      didSetStateClosure?(state)
+      didSetModelClosure?(model)
     }
   }
 
   weak open var referenceView: ListContainerView?
 
   fileprivate var didInitializeCell = false
-  fileprivate var didSetStateClosure: ((Any?) -> Void)?
+  fileprivate var didSetModelClosure: ((Any?) -> Void)?
 
   public required init(reuseIdentifier: String) {
     super.init(frame: CGRect.zero)
@@ -102,7 +102,7 @@ open class PrototypeCollectionViewCell: UICollectionViewCell, PrototypeViewCell 
   }
 
   open func initializeCellIfNecessary(_ view: UIView,
-                                        didSetState: ((Any?) -> Void)? = nil) {
+                                        didSetModel: ((Any?) -> Void)? = nil) {
 
     assert(Thread.isMainThread)
 
@@ -112,11 +112,11 @@ open class PrototypeCollectionViewCell: UICollectionViewCell, PrototypeViewCell 
 
     self.view = view
     self.contentView.addSubview(view)
-    self.didSetStateClosure = didSetState
+    self.didSetModelClosure = didSetModel
   }
 
-  open func applyState(_ state: Any?) {
-    self.state = state
+  open func applyModel(_ model: Any?) {
+    self.model = model
   }
 
   /** Asks the view to calculate and return the size that best fits the specified size.
@@ -161,7 +161,7 @@ public struct Prototypes {
       fatalError("Unregistered prototype with reuse identifier \(item.reuseIdentifier).")
     }
 
-    cell.applyState(item.stateRef)
+    cell.applyModel(item.modelRef)
     cell.referenceView = item.referenceView
     item.configure(cell: cell)
 

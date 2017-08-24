@@ -1,12 +1,11 @@
-# <img src="docs/logo.png" width="431" alt="Buffer" />
 
-[![Swift](https://img.shields.io/badge/swift-3.1-orange.svg?style=flat)](#)
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Platform](https://img.shields.io/badge/platform-ios|macos|tvos|watchos-lightgrey.svg?style=flat)](#)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://opensource.org/licenses/MIT)
+# Buffer [![Swift](https://img.shields.io/badge/swift-3.1-orange.svg?style=flat)](#) [![Platform](https://img.shields.io/badge/platform-ios | macos-lightgrey.svg?style=flat)](#) [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://opensource.org/licenses/MIT)
+
+<img src="https://raw.githubusercontent.com/alexdrone/Buffer/master/docs/logo_small.png" width=150 alt="Buffer" align=right />
 
 Swift μ-framework for efficient array diffs, collection observation and data source implementation.
-[(Swift 2.3 branch here)](https://github.com/alexdrone/Buffer/tree/swift_2_3)
+
+[Swift 2.3 branch here](https://github.com/alexdrone/Buffer/tree/swift_2_3)
 
 [C++11 port here](https://github.com/alexdrone/libbuffer)
 
@@ -18,7 +17,7 @@ If you are using **CocoaPods**:
 Add the following to your [Podfile](https://guides.cocoapods.org/using/the-podfile.html):
 
 ```ruby
-pod 'Buffer', '~> 1.3'
+pod 'Buffer'
 ```
 
 If you are using **Carthage**:
@@ -89,7 +88,10 @@ class MyClass: BufferDelegate {
 
   public func buffer(didChangeElementAtIndex buffer: BufferType, index: UInt) {
   }
-
+  
+  public func buffer(didMoveElement buffer: BufferType, from: UInt, to: UInt) {
+  }
+  
   public func buffer(didChangeAllContent buffer: BufferType) {
   }
 }
@@ -102,7 +104,7 @@ If your model is KVO-compliant, you can pass an array of keypaths to your buffer
 When one of the observed keypath changes for one of the items managed by your buffer object, the sort and the filter closures are re-applied (on a background thread), the diff is computed and the delegate methods called.
 
 ```swift
-buffer.trackKeyPaths(["foo", "bar.baz"])
+buffer.trackKeyPaths([\Foo.foo, \Bar.bar])
 ```
 
 ### Built-in UITableView and UICollectionView adapter
@@ -174,9 +176,9 @@ class ViewController: UIViewController {
       // AnyListItem wraps the data and the configuration for every row in the tableview.
       let item = ListItem(type: UITableViewCell.self,
                           container: self.tableView,
-                          state: FooModel(text: "Foo"))) {
-        cell, state in
-        cell.textLabel?.text = state.text
+                          model: FooModel(text: "Foo"))) {
+        cell, model in
+        cell.textLabel?.text = model.text
       }
       elements.append(item)
     }
@@ -201,5 +203,6 @@ Check the demo out to learn more about Buffer.
 
 ### Credits
 
-- The LCS algorithm implementation is forked from [Dwifft](https://github.com/jflinter/Dwifft) by Jack Flintermann.
-
+- Diff algorithm from IGListKit/IGListDiff
+	* [IGListKit original ObjC++ implementation](https://github.com/Instagram/IGListKit)
+	* [ListDiff Swift port](https://github.com/lxcid/ListDiff)

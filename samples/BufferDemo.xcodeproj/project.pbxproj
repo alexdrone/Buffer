@@ -13,10 +13,26 @@
 		160E25921CF45CFE00A5F828 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 160E25911CF45CFE00A5F828 /* Assets.xcassets */; };
 		160E25951CF45CFE00A5F828 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 160E25931CF45CFE00A5F828 /* LaunchScreen.storyboard */; };
 		160E25A21CF4604600A5F828 /* Lorem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160E25A11CF4604600A5F828 /* Lorem.swift */; };
-		16A8002C1D87316900A8B3F3 /* Buffer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A8002B1D87316900A8B3F3 /* Buffer.framework */; };
-		16A8002D1D87317B00A8B3F3 /* Buffer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A8002B1D87316900A8B3F3 /* Buffer.framework */; };
-		16A8002E1D87317B00A8B3F3 /* Buffer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 16A8002B1D87316900A8B3F3 /* Buffer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		16A4DF001F4F093F0082BF5A /* Buffer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A4DEFF1F4F092E0082BF5A /* Buffer.framework */; };
+		16A4DF011F4F093F0082BF5A /* Buffer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 16A4DEFF1F4F092E0082BF5A /* Buffer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		16A4DEFE1F4F092E0082BF5A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 16A4DEF51F4F09260082BF5A /* Buffer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 160E255F1CF44C3700A5F828;
+			remoteInfo = Buffer;
+		};
+		16A4DF021F4F093F0082BF5A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 16A4DEF51F4F09260082BF5A /* Buffer.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 160E255E1CF44C3700A5F828;
+			remoteInfo = Buffer;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		160E259F1CF45D5200A5F828 /* Embed Frameworks */ = {
@@ -25,7 +41,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				16A8002E1D87317B00A8B3F3 /* Buffer.framework in Embed Frameworks */,
+				16A4DF011F4F093F0082BF5A /* Buffer.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -41,7 +57,7 @@
 		160E25941CF45CFE00A5F828 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		160E25961CF45CFE00A5F828 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		160E25A11CF4604600A5F828 /* Lorem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lorem.swift; sourceTree = "<group>"; };
-		16A8002B1D87316900A8B3F3 /* Buffer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Buffer.framework; path = BufferDemo/Buffer.framework; sourceTree = "<group>"; };
+		16A4DEF51F4F09260082BF5A /* Buffer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Buffer.xcodeproj; path = ../Buffer.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,8 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				16A8002D1D87317B00A8B3F3 /* Buffer.framework in Frameworks */,
-				16A8002C1D87316900A8B3F3 /* Buffer.framework in Frameworks */,
+				16A4DF001F4F093F0082BF5A /* Buffer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,9 +75,9 @@
 		160E257E1CF45CFE00A5F828 = {
 			isa = PBXGroup;
 			children = (
+				16A4DEF51F4F09260082BF5A /* Buffer.xcodeproj */,
 				160E25891CF45CFE00A5F828 /* BufferDemo */,
 				160E25881CF45CFE00A5F828 /* Products */,
-				16A8002B1D87316900A8B3F3 /* Buffer.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -88,6 +103,14 @@
 			path = BufferDemo;
 			sourceTree = "<group>";
 		};
+		16A4DEFB1F4F092E0082BF5A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				16A4DEFF1F4F092E0082BF5A /* Buffer.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -103,6 +126,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				16A4DF031F4F093F0082BF5A /* PBXTargetDependency */,
 			);
 			name = BufferDemo;
 			productName = BufferDemo;
@@ -136,12 +160,28 @@
 			mainGroup = 160E257E1CF45CFE00A5F828;
 			productRefGroup = 160E25881CF45CFE00A5F828 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 16A4DEFB1F4F092E0082BF5A /* Products */;
+					ProjectRef = 16A4DEF51F4F09260082BF5A /* Buffer.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				160E25861CF45CFE00A5F828 /* BufferDemo */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		16A4DEFF1F4F092E0082BF5A /* Buffer.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Buffer.framework;
+			remoteRef = 16A4DEFE1F4F092E0082BF5A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		160E25851CF45CFE00A5F828 /* Resources */ = {
@@ -168,6 +208,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		16A4DF031F4F093F0082BF5A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Buffer;
+			targetProxy = 16A4DF021F4F093F0082BF5A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		160E258E1CF45CFE00A5F828 /* Main.storyboard */ = {
@@ -277,6 +325,7 @@
 		160E259A1CF45CFE00A5F828 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -294,6 +343,7 @@
 		160E259B1CF45CFE00A5F828 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

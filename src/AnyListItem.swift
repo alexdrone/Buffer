@@ -11,69 +11,36 @@ public protocol ListViewCell: class { }
   extension UICollectionViewCell: ListViewCell { }
 #endif
 
-public struct AnyListItem: ListItemType, Equatable {
+public protocol ListItemType: Diffable {
 
-  public var reuseIdentifier: String {
-    get { return self.ref.reuseIdentifier }
-    set { self.ref.reuseIdentifier = newValue }
-  }
-  public var uniqueIdentifier: String? {
-    get { return self.ref.uniqueIdentifier }
-    set { self.ref.uniqueIdentifier = newValue }
-  }
-  public var referenceView: ListContainerView? {
-    return self.ref.referenceView
-  }
-  public var stateRef: Any? {
-    return self.ref.stateRef
-  }
-
-  public var ref: ListItemType
-  init(ref: ListItemType) {
-    self.ref = ref
-  }
-
-  public func configure(cell: ListViewCell) {
-    self.ref.configure(cell: cell)
-  }
-}
-
-public func ==(lhs: AnyListItem, rhs: AnyListItem) -> Bool {
-  return lhs.reuseIdentifier == rhs.reuseIdentifier
-         && lhs.uniqueIdentifier == rhs.uniqueIdentifier
-}
-
-public func ==<Type>(lhs: ListItem<Type>, rhs: ListItem<Type>) -> Bool {
-  return lhs.reuseIdentifier == rhs.reuseIdentifier && lhs.state == rhs.state
-}
-
-public protocol ListItemType {
-
-  /** The reuse identifier for the cell passed as argument. */
+  /// The reuse identifier for the cell passed as argument.
   var reuseIdentifier: String { get set }
 
-  /** The unique identifier for this item. */
-  var uniqueIdentifier: String? { get set }
-
-  /** The TableView, or the CollectionView that will own this element. */
+  /// The TableView, or the CollectionView that will own this element.
   var referenceView: ListContainerView? { get }
 
-  var stateRef: Any? { get }
+  var modelRef: Any? { get }
 
-  /** Configure the cell with the current item. */
+  /// Configure the cell with the current item.
   func configure(cell: ListViewCell)
 }
 
-public class ListItem<Type: Equatable>: Equatable, ListItemType {
+public class ListItem<Type: Diffable>: ListItemType, CustomDebugStringConvertible {
 
   public var reuseIdentifier: String
-  public var uniqueIdentifier: String?
+  public var diffIdentifier: String {
+    return "\(reuseIdentifier)_\(model.diffIdentifier)"
+  }
   public let referenceView: ListContainerView?
 
-  /** The actual item data. */
-  public var state: Type
-  public var stateRef: Any? {
-    return self.state
+  /// The actual item data.
+  public var model: Type
+  public var modelRef: Any? {
+    return self.model
+  }
+
+  public var debugDescription: String {
+    return self.diffIdentifier
   }
 
   public var cellConfiguration: ((ListViewCell, Type) -> Void)?
@@ -83,8 +50,7 @@ public class ListItem<Type: Equatable>: Equatable, ListItemType {
       type: V.Type,
       container: ListContainerView,
       reuseIdentifer: String = String(describing: V.self),
-      id: String? = nil,
-      state: Type,
+      model: Type,
       configurationClosure: ((V, Type) -> Void)? = nil) {
 
     // registers the prototype cell if necessary.
@@ -99,9 +65,8 @@ public class ListItem<Type: Equatable>: Equatable, ListItemType {
         return closure(cell as! V, type)
       }
     }
-    self.uniqueIdentifier = id
     self.referenceView = container
-    self.state = state
+    self.model = model
     self.registerReferenceView(with: type)
   }
   #endif
@@ -111,7 +76,7 @@ public class ListItem<Type: Equatable>: Equatable, ListItemType {
       container: ListContainerView? = nil,
       reuseIdentifer: String = String(describing: V.self),
       id: String? = nil,
-      state: Type,
+      model: Type,
       configurationClosure: ((V, Type) -> Void)? = nil) {
 
     self.reuseIdentifier = reuseIdentifer
@@ -120,9 +85,8 @@ public class ListItem<Type: Equatable>: Equatable, ListItemType {
         return closure(cell as! V, type)
       }
     }
-    self.uniqueIdentifier = id
     self.referenceView = container
-    self.state = state
+    self.model = model
     self.registerReferenceView(with: type)
   }
 
@@ -139,6 +103,6 @@ public class ListItem<Type: Equatable>: Equatable, ListItemType {
 
   public func configure(cell: ListViewCell) {
 
-    self.cellConfiguration?(cell,  self.state)
+    self.cellConfiguration?(cell,  self.model)
   }
 }
