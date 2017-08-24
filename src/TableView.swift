@@ -3,14 +3,14 @@ import UIKit
 
 open class TableView<Type: Diffable>: UITableView {
 
-  /** The elements for the table view. */
+  /// The elements for the table view.
   open var elements = [ListItem<Type>]() {
     didSet {
       self.adapter.buffer.update(with: self.elements)
     }
   }
 
-  /** The adapter for this table view. */
+  /// The adapter for this table view.
   open lazy var adapter: TableViewDiffAdapter<ListItem<Type>> = {
     return TableViewDiffAdapter(initialElements: [ListItem<Type>](), view: self)
   }()

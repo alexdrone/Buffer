@@ -1,11 +1,3 @@
-//
-//  BufferDiff.h
-//  BufferDiff
-//
-//  Created by Alex Usbergo on 24/05/16.
-//  Copyright © 2016 Alex Usbergo. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 
 //! Project version number for BufferDiff.

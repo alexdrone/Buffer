@@ -168,9 +168,9 @@ public class Buffer<ElementType: Diffable>: NSObject, BufferType {
   /// This message is sent to the receiver when the value at the specified key path relative
   /// to the given object has changed.
   public override func observeValue(forKeyPath keyPath: String?,
-                                              of object: Any?,
-                                              change: [NSKeyValueChangeKey : Any]?,
-                                              context: UnsafeMutableRawPointer?) {
+                                    of object: Any?,
+                                    change: [NSKeyValueChangeKey : Any]?,
+                                    context: UnsafeMutableRawPointer?) {
 
     if context != &__observationContext {
       super.observeValue(forKeyPath: keyPath, of:object, change:change, context:context)
