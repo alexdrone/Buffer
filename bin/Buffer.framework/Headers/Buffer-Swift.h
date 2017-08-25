@@ -132,12 +132,23 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 # define SWIFT_DEPRECATED_MSG(...) __attribute__((deprecated(__VA_ARGS__)))
 #endif
 #if defined(__has_feature) && __has_feature(modules)
+@import Foundation;
 @import UIKit;
 @import CoreGraphics;
 #endif
 
 #pragma clang diagnostic ignored "-Wproperty-attribute-mismatch"
 #pragma clang diagnostic ignored "-Wduplicate-method-arg"
+
+@interface NSNumber (SWIFT_EXTENSION(Buffer))
+@property (nonatomic, readonly, copy) NSString * _Nonnull diffIdentifier;
+@end
+
+
+@interface NSString (SWIFT_EXTENSION(Buffer))
+@property (nonatomic, readonly, copy) NSString * _Nonnull diffIdentifier;
+@end
+
 @class UIView;
 @class NSCoder;
 
@@ -145,48 +156,27 @@ SWIFT_CLASS("_TtC6Buffer27PrototypeCollectionViewCell")
 @interface PrototypeCollectionViewCell : UICollectionViewCell
 /// The wrapped view.
 @property (nonatomic, strong) UIView * _Null_unspecified view;
-/// The state for this cell.
+/// The model for this cell.
 /// note:
 /// This is propagated to the associted.
-@property (nonatomic) id _Nullable state;
+@property (nonatomic) id _Nullable model;
 - (nonnull instancetype)initWithReuseIdentifier:(NSString * _Nonnull)reuseIdentifier OBJC_DESIGNATED_INITIALIZER;
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
-- (void)initializeCellIfNecessary:(UIView * _Nonnull)view didSetState:(void (^ _Nullable)(id _Nullable))didSetState;
-- (void)applyState:(id _Nullable)state;
+- (void)initializeCellIfNecessary:(UIView * _Nonnull)view didSetModel:(void (^ _Nullable)(id _Nullable))didSetModel;
+- (void)applyModel:(id _Nullable)model;
 /// Asks the view to calculate and return the size that best fits the specified size.
-/// <ul>
-///   <li>
-///     <ul>
-///       <li>
-///         parameter size: The size for which the view should calculate its best-fitting size.
-///       </li>
-///     </ul>
-///   </li>
-///   <li>
-///     <ul>
-///       <li>
-///         returns: A new size that fits the receiver’s subviews.
-///       </li>
-///     </ul>
-///   </li>
-/// </ul>
+/// \param size The size for which the view should calculate its best-fitting size.
+///
+///
+/// returns:
+/// A new size that fits the receiver’s subviews.
 - (CGSize)sizeThatFits:(CGSize)size SWIFT_WARN_UNUSED_RESULT;
 /// Returns the natural size for the receiving view, considering only properties of the
-/// <ul>
-///   <li>
-///     view itself.
-///   </li>
-///   <li>
-///     <ul>
-///       <li>
-///         returns: A size indicating the natural size for the receiving view based on its
-///       </li>
-///     </ul>
-///   </li>
-///   <li>
-///     intrinsic properties.
-///   </li>
-/// </ul>
+/// view itself.
+///
+/// returns:
+/// A size indicating the natural size for the receiving view based on its
+/// intrinsic properties.
 @property (nonatomic, readonly) CGSize intrinsicContentSize;
 - (nonnull instancetype)initWithFrame:(CGRect)frame SWIFT_UNAVAILABLE;
 @end
@@ -196,45 +186,24 @@ SWIFT_CLASS("_TtC6Buffer22PrototypeTableViewCell")
 @interface PrototypeTableViewCell : UITableViewCell
 /// The wrapped view.
 @property (nonatomic, strong) UIView * _Null_unspecified view;
-@property (nonatomic) id _Nullable state;
+@property (nonatomic) id _Nullable model;
 - (nonnull instancetype)initWithReuseIdentifier:(NSString * _Nonnull)reuseIdentifier OBJC_DESIGNATED_INITIALIZER;
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
-- (void)initializeCellIfNecessary:(UIView * _Nonnull)view didSetState:(void (^ _Nullable)(id _Nullable))didSetState;
-- (void)applyState:(id _Nullable)state;
+- (void)initializeCellIfNecessary:(UIView * _Nonnull)view didSetModel:(void (^ _Nullable)(id _Nullable))didSetModel;
+- (void)applyModel:(id _Nullable)model;
 /// Asks the view to calculate and return the size that best fits the specified size.
-/// <ul>
-///   <li>
-///     <ul>
-///       <li>
-///         parameter size: The size for which the view should calculate its best-fitting size.
-///       </li>
-///     </ul>
-///   </li>
-///   <li>
-///     <ul>
-///       <li>
-///         returns: A new size that fits the receiver’s subviews.
-///       </li>
-///     </ul>
-///   </li>
-/// </ul>
+/// \param size The size for which the view should calculate its best-fitting size.
+///
+///
+/// returns:
+/// A new size that fits the receiver’s subviews.
 - (CGSize)sizeThatFits:(CGSize)size SWIFT_WARN_UNUSED_RESULT;
 /// Returns the natural size for the receiving view, considering only properties of the
-/// <ul>
-///   <li>
-///     view itself.
-///   </li>
-///   <li>
-///     <ul>
-///       <li>
-///         returns: A size indicating the natural size for the receiving view based on its
-///       </li>
-///     </ul>
-///   </li>
-///   <li>
-///     intrinsic properties.
-///   </li>
-/// </ul>
+/// view itself.
+///
+/// returns:
+/// A size indicating the natural size for the receiving view based on its
+/// intrinsic properties.
 @property (nonatomic, readonly) CGSize intrinsicContentSize;
 - (nonnull instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString * _Nullable)reuseIdentifier SWIFT_UNAVAILABLE;
 @end
