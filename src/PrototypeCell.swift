@@ -2,10 +2,8 @@
 import UIKit
 
 public protocol PrototypeViewCell: ListViewCell {
-
   /// The TableView or CollectionView that owns this cell.
   var referenceView: ListContainerView? { get set }
-
   /// Apply the model.
   /// - Note: This is used internally from the infra to set the model.
   func applyModel(_ model: Any?)
@@ -14,16 +12,13 @@ public protocol PrototypeViewCell: ListViewCell {
 }
 
 open class PrototypeTableViewCell : UITableViewCell, PrototypeViewCell {
-
   /// The wrapped view.
   open var view: UIView!
-
   open var model: Any? {
     didSet {
       didSetModelClosure?(model)
     }
   }
-
   open weak var referenceView: ListContainerView?
   fileprivate var didInitializeCell = false
   fileprivate var didSetModelClosure: ((Any?) -> Void)?
@@ -73,10 +68,8 @@ open class PrototypeTableViewCell : UITableViewCell, PrototypeViewCell {
 }
 
 open class PrototypeCollectionViewCell: UICollectionViewCell, PrototypeViewCell {
-
   ///The wrapped view.
   open var view: UIView!
-
   ///The model for this cell.
   /// - Note: This is propagated to the associted.
   open var model: Any? {
@@ -84,9 +77,7 @@ open class PrototypeCollectionViewCell: UICollectionViewCell, PrototypeViewCell 
       didSetModelClosure?(model)
     }
   }
-
   weak open var referenceView: ListContainerView?
-
   fileprivate var didInitializeCell = false
   fileprivate var didSetModelClosure: ((Any?) -> Void)?
 
@@ -100,9 +91,7 @@ open class PrototypeCollectionViewCell: UICollectionViewCell, PrototypeViewCell 
 
   open func initializeCellIfNecessary(_ view: UIView,
                                         didSetModel: ((Any?) -> Void)? = nil) {
-
     assert(Thread.isMainThread)
-
     // make sure this happens just once
     if self.didInitializeCell { return }
     self.didInitializeCell = true
@@ -168,5 +157,3 @@ public struct Prototypes {
 }
 
 #endif
-
-

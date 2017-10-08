@@ -4,7 +4,6 @@ import UIKit
 open class TableViewDiffAdapter<ElementType: Diffable>: NSObject,
                                                         AdapterType,
                                                         UITableViewDataSource {
-
   public typealias `Type` = ElementType
   public typealias ViewType = UITableView
   open fileprivate(set) var buffer: Buffer<ElementType>

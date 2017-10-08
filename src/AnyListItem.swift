@@ -12,13 +12,10 @@ public protocol ListViewCell: class { }
 #endif
 
 public protocol ListItemType: Diffable {
-
   /// The reuse identifier for the cell passed as argument.
   var reuseIdentifier: String { get set }
-
   /// The TableView, or the CollectionView that will own this element.
   var referenceView: ListContainerView? { get }
-
   var modelRef: Any? { get }
 
   /// Configure the cell with the current item.
@@ -26,23 +23,15 @@ public protocol ListItemType: Diffable {
 }
 
 public class ListItem<Type: Diffable>: ListItemType, CustomDebugStringConvertible {
-
   public var reuseIdentifier: String
   public var diffIdentifier: String {
     return "\(reuseIdentifier)_\(model.diffIdentifier)"
   }
   public let referenceView: ListContainerView?
-
   /// The actual item data.
   public var model: Type
-  public var modelRef: Any? {
-    return self.model
-  }
-
-  public var debugDescription: String {
-    return self.diffIdentifier
-  }
-
+  public var modelRef: Any? { return self.model }
+  public var debugDescription: String { return self.diffIdentifier }
   public var cellConfiguration: ((ListViewCell, Type) -> Void)?
 
   #if os(iOS)
@@ -102,7 +91,6 @@ public class ListItem<Type: Diffable>: ListItemType, CustomDebugStringConvertibl
   }
 
   public func configure(cell: ListViewCell) {
-
     self.cellConfiguration?(cell,  self.model)
   }
 }

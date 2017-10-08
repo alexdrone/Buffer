@@ -3,22 +3,16 @@ import Foundation
 public protocol BufferType { }
 
 public protocol BufferDelegate: class {
-
   /// Notifies the receiver that the content is about to change.
   func buffer(willChangeContent buffer: BufferType)
-
   /// Notifies the receiver that rows were deleted.
   func buffer(didDeleteElementAtIndices buffer: BufferType, indices: [UInt])
-
   /// Notifies the receiver that rows were inserted.
   func buffer(didInsertElementsAtIndices buffer: BufferType, indices: [UInt])
-
   /// Notifies the receiver that an element has been moved to a different position.
   func buffer(didMoveElement buffer: BufferType, from: UInt, to: UInt)
-
   /// Notifies the receiver that the content updates has ended.
   func buffer(didChangeContent buffer: BufferType)
-
   /// Notifies the receiver that the content updates has ended.
   /// This callback method is called when the number of changes are too many to be
   /// handled for the UI thread - it's recommendable to just reload the whole data in this case.
@@ -26,29 +20,23 @@ public protocol BufferDelegate: class {
   /// of changes
   /// that you want the receiver to be notified for.
   func buffer(didChangeAllContent buffer: BufferType)
-
   /// Called when one of the observed properties for this object changed.
   func buffer(didChangeElementAtIndex buffer: BufferType, index: UInt)
 }
 
 public class Buffer<ElementType: Diffable>: NSObject, BufferType {
-
   /// The object that will get notified every time chavbcnges occures to the array.
   public weak var delegate: BufferDelegate?
-
   /// The elements in the array observer's buffer.
   public var currentElements: [ElementType] {
     return self.frontBuffer
   }
-
   /// Defines what is the maximum number of changes that you want the receiver to be notified for.
-  public var diffThreshold = 300
-
+  public var diffThreshold = 256
   // If set to 'true' the LCS algorithm is run synchronously on the main thread.
-  fileprivate var synchronous: Bool = false
-
+  private var synchronous: Bool = false
   // The two buffers.
-  fileprivate var frontBuffer = [ElementType]() {
+  private var frontBuffer = [ElementType]() {
     willSet {
       assert(Thread.isMainThread)
       self.observe(shouldObserveTrackedKeyPaths: false)
@@ -58,26 +46,24 @@ public class Buffer<ElementType: Diffable>: NSObject, BufferType {
       self.observe(shouldObserveTrackedKeyPaths: true)
     }
   }
-  fileprivate var backBuffer = [ElementType]()
-
+  private var backBuffer = [ElementType]()
   // Sort closure.
-  fileprivate var sort: ((ElementType, ElementType) -> Bool)?
-
+  private var sort: ((ElementType, ElementType) -> Bool)?
   // Filter closure.
-  fileprivate var filter: ((ElementType) -> Bool)?
+  private var filter: ((ElementType) -> Bool)?
 
   // The serial operation queue for this controller.
-  fileprivate let serialOperationQueue: OperationQueue = {
+  private let serialOperationQueue: OperationQueue = {
     let operationQueue = OperationQueue()
     operationQueue.maxConcurrentOperationCount = 1
     return operationQueue
   }()
 
-  fileprivate var flags = (isRefreshing: false,
+  private var flags = (isRefreshing: false,
                        shouldRefresh: false)
 
   // Used if 'Element' is KVO-compliant.
-  fileprivate var trackedKeyPaths = [String]()
+  private var trackedKeyPaths = [String]()
 
   public init(initialArray: [ElementType],
               sort: ((ElementType, ElementType) -> Bool)? = nil,
@@ -199,7 +185,7 @@ extension Buffer {
 
   /// Adds or remove observations.
   /// - Note: This code is executed only when 'Element: AnyObject'.
-  fileprivate func observe(shouldObserveTrackedKeyPaths: Bool = true) {
+  private func observe(shouldObserveTrackedKeyPaths: Bool = true) {
     if self.trackedKeyPaths.count == 0 {
       return
     }
@@ -221,7 +207,7 @@ extension Buffer {
   }
 
   // - Note: This code is executed only when 'Element: AnyObject'.
-  fileprivate func objectDidChangeValue(for keyPath: String?, in object: AnyObject?) {
+  private func objectDidChangeValue(for keyPath: String?, in object: AnyObject?) {
     guard let object = object else {
       return
     }
@@ -245,7 +231,7 @@ private var __observationContext: UInt8 = 0
 
 //MARK: Dispatch Helpers
 
-fileprivate extension Buffer {
+private extension Buffer {
 
   func dispatchOnMainThread(synchronous: Bool = false,
                             block: @escaping () -> Void) {
@@ -254,7 +240,9 @@ fileprivate extension Buffer {
       block()
     } else {
       if Thread.isMainThread { block()
-      } else { DispatchQueue.main.async(execute: block) }
+      } else {
+        DispatchQueue.main.async(execute: block)
+      }
     }
   }
 
@@ -263,7 +251,7 @@ fileprivate extension Buffer {
     if synchronous {
       block()
     } else {
-      self.serialOperationQueue.addOperation(){
+      self.serialOperationQueue.addOperation {
         DispatchQueue.global().async(execute: block)
       }
     }

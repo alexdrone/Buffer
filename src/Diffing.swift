@@ -7,13 +7,11 @@ public typealias EqualityChecker<T: Diffable> = (T, T) -> Bool
 
 /// An object that can be diffed.
 public protocol Diffable {
-
   /// The identifier used from the diffing algorithm.
   var diffIdentifier: String { get }
 }
 
 public protocol Diffing {
-
   /// Return the diff result from 'oldArray' to 'newArray'
   static func diffing<T: Diffable>(oldArray: [T],
                                    newArray: [T],
@@ -85,7 +83,6 @@ public struct DiffResult<H: Hashable> : DiffResultType,
 }
 
 extension DiffResultType {
-
   public var hasChanges: Bool {
     guard inserts.isEmpty else { return true }
     guard deletes.isEmpty else { return true }
@@ -150,7 +147,6 @@ public enum Diff: Diffing {
   }
 
   private struct OptimizedIdentity<E: Hashable> : Hashable {
-
     let hashValue: Int
     let identity: UnsafePointer<E>
 

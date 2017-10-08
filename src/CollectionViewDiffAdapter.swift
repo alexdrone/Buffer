@@ -4,7 +4,6 @@ import UIKit
 open class CollectionViewDiffAdapter<ElementType: Diffable>: NSObject,
                                                              AdapterType,
                                                              UICollectionViewDataSource {
-
   public typealias `Type` = ElementType
   public typealias ViewType = UICollectionView
   open fileprivate(set) var buffer: Buffer<ElementType>
