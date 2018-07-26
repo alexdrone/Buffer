@@ -6,28 +6,27 @@ func ==(lhs: FooModel, rhs: FooModel) -> Bool {
 }
 
 struct FooModel: Diffable {
-  var diffIdentifier: String {
-    return text
-  }
+  /// The identifier used from the diffing algorithm.
+  var diffIdentifier: String { return text }
+  /// Simple text property.
   let text: String
 }
 
 class ViewController: UIViewController, UITableViewDelegate {
-
-  lazy var tableView: TableView<FooModel> = {
-    let tableView = TableView<FooModel>()
+  /// A declarative TableView from Buffer.
+  lazy var tableView: BufferTableView<FooModel> = {
+    let tableView = BufferTableView<FooModel>()
     tableView.delegate = self
     return tableView
   }()
-
+  /// Some dummy elements.
   lazy var elements: [ListItem<FooModel>] = {
     var elements = [ListItem<FooModel>]()
     for i in 0...100 {
-      let item = ListItem(type: UITableViewCell.self,
-                          container: self.tableView,
-                          model: FooModel(text: ("\(i)"))) { cell, model in
-                            cell.textLabel?.text = model.text
-      }
+      let item = ListItem(
+        type: UITableViewCell.self,
+        container: self.tableView,
+        model: FooModel(text: ("\(i)"))) { cell, model in cell.textLabel?.text = model.text }
       elements.append(item)
     }
     return elements
@@ -44,9 +43,8 @@ class ViewController: UIViewController, UITableViewDelegate {
   }
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    guard let tableView = tableView as? TableView<FooModel> else {
-      return
-    }
+    guard let tableView = tableView as? BufferTableView<FooModel> else { return }
+    // Performs a bunch of random operations on the list.
     var newElements = tableView.elements
     let index: Int = (indexPath as NSIndexPath).row
     let element = newElements[index]

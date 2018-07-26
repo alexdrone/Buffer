@@ -24,87 +24,70 @@ public protocol BufferDelegate: class {
   func buffer(didChangeElementAtIndex buffer: BufferType, index: UInt)
 }
 
-public class Buffer<ElementType: Diffable>: NSObject, BufferType {
+public class Buffer<E: Diffable>: NSObject, BufferType {
   /// The object that will get notified every time chavbcnges occures to the array.
   public weak var delegate: BufferDelegate?
   /// The elements in the array observer's buffer.
-  public var currentElements: [ElementType] {
+  public var currentElements: [E] {
     return self.frontBuffer
   }
   /// Defines what is the maximum number of changes that you want the receiver to be notified for.
-  public var diffThreshold = 256
-  // If set to 'true' the LCS algorithm is run synchronously on the main thread.
+  /// - note: If the number of changes exceeds this number, *buffer(didChangeAllContent:)* is going
+  /// to be invoked instead.
+  public var diffThreshold = 100
+  /// If set to 'true' the LCS algorithm is run synchronously on the main thread.
   private var synchronous: Bool = false
-  // The two buffers.
-  private var frontBuffer = [ElementType]() {
-    willSet {
-      assert(Thread.isMainThread)
-      self.observe(shouldObserveTrackedKeyPaths: false)
-    }
-    didSet {
-      assert(Thread.isMainThread)
-      self.observe(shouldObserveTrackedKeyPaths: true)
-    }
-  }
-  private var backBuffer = [ElementType]()
-  // Sort closure.
-  private var sort: ((ElementType, ElementType) -> Bool)?
-  // Filter closure.
-  private var filter: ((ElementType) -> Bool)?
-
-  // The serial operation queue for this controller.
+  /// The exposed array.
+  private var frontBuffer = [E]()
+  /// The internal array.
+  private var backBuffer = [E]()
+  /// Sort closure.
+  private var sort: ((E, E) -> Bool)?
+  /// Filter closure.
+  private var filter: ((E) -> Bool)?
+  /// The serial operation queue for this controller.
   private let serialOperationQueue: OperationQueue = {
     let operationQueue = OperationQueue()
     operationQueue.maxConcurrentOperationCount = 1
     return operationQueue
   }()
+  /// Internal state flags.
+  private var flags = (
+    isRefreshing: false,
+    shouldRefresh: false)
 
-  private var flags = (isRefreshing: false,
-                       shouldRefresh: false)
-
-  // Used if 'Element' is KVO-compliant.
-  private var trackedKeyPaths = [String]()
-
-  public init(initialArray: [ElementType],
-              sort: ((ElementType, ElementType) -> Bool)? = nil,
-              filter: ((ElementType) -> Bool)? = nil) {
-
+  /// Constructs a new buffer instance.
+  public init(
+    initialArray: [E],
+    sort: ((E, E) -> Bool)? = nil,
+    filter: ((E) -> Bool)? = nil
+  ) {
     self.frontBuffer = initialArray
     self.sort = sort
     self.filter = filter
   }
 
-  deinit {
-    self.observe(shouldObserveTrackedKeyPaths: false)
-  }
-
   /// Compute the diffs between the current array and the new one passed as argument.
   public func update(
-    with values: [ElementType]? = nil,
+    with values: [E]? = nil,
     synchronous: Bool = false,
-    completion: (() -> Void)? = nil) {
-
-    let new = values ?? self.frontBuffer
-
+    completion: (() -> Void)? = nil
+  ) -> Void {
     // Should be called on the main thread.
     assert(Thread.isMainThread)
-
+    let new = values ?? self.frontBuffer
     self.backBuffer = new
-
     // Is already refreshing.
     if self.flags.isRefreshing {
       self.flags.shouldRefresh = true
       return
     }
-
     self.flags.isRefreshing = true
-
     self.dispatchOnSerialQueue(synchronous: synchronous) { [weak self] in
       guard let `self` = self else {
         return
       }
       var backBuffer = self.backBuffer
-
       // Filter and sorts (if necessary).
       if let filter = self.filter {
         backBuffer = backBuffer.filter(filter)
@@ -112,25 +95,27 @@ public class Buffer<ElementType: Diffable>: NSObject, BufferType {
       if let sort = self.sort {
         backBuffer = backBuffer.sorted(by: sort)
       }
-
-      let diff = Diff.diffing(oldArray: self.frontBuffer.map { $0.diffIdentifier},
-                              newArray: backBuffer.map { $0.diffIdentifier }) {
+      // Compute the diffing.
+      let diff = Diff.diffing(
+        oldArray: self.frontBuffer.map { $0.diffIdentifier},
+        newArray: backBuffer.map { $0.diffIdentifier }) {
         return $0 == $1
       }
-
+      // Update the front buffer on the main thread.
       self.dispatchOnMainThread(synchronous: synchronous) { [weak self] in
         guard let `self` = self else {
           return
         }
-        //swaps the buffers.
+        // Swaps the buffers.
         self.frontBuffer = backBuffer
-
         if diff.inserts.count < self.diffThreshold && diff.deletes.count < self.diffThreshold {
           self.delegate?.buffer(willChangeContent: self)
-          self.delegate?.buffer(didInsertElementsAtIndices: self,
-                                indices: diff.inserts.map({ UInt($0) }))
-          self.delegate?.buffer(didDeleteElementAtIndices: self,
-                                indices: diff.deletes.map({ UInt($0) }))
+          self.delegate?.buffer(
+            didInsertElementsAtIndices: self,
+            indices: diff.inserts.map({ UInt($0) }))
+          self.delegate?.buffer(
+            didDeleteElementAtIndices: self,
+            indices: diff.deletes.map({ UInt($0) }))
           for move in diff.moves {
             self.delegate?.buffer(didMoveElement: self, from: UInt(move.from), to: UInt(move.to))
           }
@@ -138,122 +123,52 @@ public class Buffer<ElementType: Diffable>: NSObject, BufferType {
         } else {
           self.delegate?.buffer(didChangeAllContent: self)
         }
-
-        //re-rerun refresh if necessary.
+        // Re-rerun refresh if necessary.
         self.flags.isRefreshing = false
         if self.flags.shouldRefresh {
           self.flags.shouldRefresh = false
           self.update(with: self.backBuffer)
         }
-
         completion?()
       }
     }
   }
-
-  /// This message is sent to the receiver when the value at the specified key path relative
-  /// to the given object has changed.
-  public override func observeValue(forKeyPath keyPath: String?,
-                                    of object: Any?,
-                                    change: [NSKeyValueChangeKey : Any]?,
-                                    context: UnsafeMutableRawPointer?) {
-
-    if context != &__observationContext {
-      super.observeValue(forKeyPath: keyPath, of:object, change:change, context:context)
-      return
-    }
-    if self.trackedKeyPaths.contains(keyPath!) {
-      self.objectDidChangeValue(for: keyPath, in: object as AnyObject?)
-    }
-
-  }
 }
-
-// MARK: KVO Extension
-
-extension Buffer where ElementType: AnyObject {
-
-  /// Observe the keypaths passed as argument.
-  public func trackKeyPaths(_ keypaths: [String]) {
-    self.observe(shouldObserveTrackedKeyPaths: false)
-    self.trackedKeyPaths = keypaths
-    self.observe()
-  }
-}
-
-extension Buffer {
-
-  /// Adds or remove observations.
-  /// - Note: This code is executed only when 'Element: AnyObject'.
-  private func observe(shouldObserveTrackedKeyPaths: Bool = true) {
-    if self.trackedKeyPaths.count == 0 {
-      return
-    }
-    for keyPath in trackedKeyPaths {
-      for item in self.frontBuffer {
-        if let object = item as? NSObject {
-          if shouldObserveTrackedKeyPaths {
-            object.addObserver(self,
-                               forKeyPath: keyPath,
-                               options: NSKeyValueObservingOptions.new,
-                               context: &__observationContext)
-
-          } else {
-            object.removeObserver(self, forKeyPath: keyPath)
-          }
-        }
-      }
-    }
-  }
-
-  // - Note: This code is executed only when 'Element: AnyObject'.
-  private func objectDidChangeValue(for keyPath: String?, in object: AnyObject?) {
-    guard let object = object else {
-      return
-    }
-    dispatchOnMainThread {
-      self.update() {
-        var idx = 0
-        let frontBuffer: [AnyObject] = self.frontBuffer.flatMap { $0 as AnyObject }
-        for item in frontBuffer {
-          if item === object { break }
-          idx += 1
-        }
-        if idx < self.frontBuffer.count {
-          self.delegate?.buffer(didChangeElementAtIndex: self, index: UInt(idx))
-        }
-      }
-    }
-  }
-}
-
-private var __observationContext: UInt8 = 0
 
 //MARK: Dispatch Helpers
 
 private extension Buffer {
-
-  func dispatchOnMainThread(synchronous: Bool = false,
-                            block: @escaping () -> Void) {
+  /// Dispatches the block passed as argument on the main thread.
+  /// - parameter synchronous: If true the block is going to be called on the current call stack.
+  /// - parameter block: The block that is going to be executed.
+  func dispatchOnMainThread(
+    synchronous: Bool = false,
+    block: @escaping () -> Void
+  ) -> Void {
     if synchronous {
       assert(Thread.isMainThread)
       block()
-    } else {
-      if Thread.isMainThread { block()
-      } else {
-        DispatchQueue.main.async(execute: block)
-      }
+      return
     }
-  }
-
-  func dispatchOnSerialQueue(synchronous: Bool = false,
-                             block: @escaping () -> Void) {
-    if synchronous {
+    if Thread.isMainThread {
       block()
     } else {
-      self.serialOperationQueue.addOperation {
-        DispatchQueue.global().async(execute: block)
-      }
+      DispatchQueue.main.async(execute: block)
+    }
+  }
+  /// Dispatches the block passed as argument on the ad-hoc serial queue (if necesary).
+  /// - parameter synchronous: If true the block is going to be called on the current call stack.
+  /// - parameter block: The block that is going to be executed.
+  func dispatchOnSerialQueue(
+    synchronous: Bool = false,
+    block: @escaping () -> Void
+  ) -> Void {
+    if synchronous {
+      block()
+      return
+    }
+    self.serialOperationQueue.addOperation {
+      DispatchQueue.global().async(execute: block)
     }
   }
 }

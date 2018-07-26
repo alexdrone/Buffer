@@ -1,21 +1,27 @@
 #if os(iOS)
 import UIKit
 
-open class TableViewDiffAdapter<ElementType: Diffable>: NSObject,
-                                                        AdapterType,
-                                                        UITableViewDataSource {
-  public typealias `Type` = ElementType
-  public typealias ViewType = UITableView
-  open fileprivate(set) var buffer: Buffer<ElementType>
-  open fileprivate(set) weak var view: ViewType?
+open class TableViewDiffAdapter<E: Diffable>:
+  NSObject,
+  AdapterType,
+  UITableViewDataSource {
 
+  public typealias `Type` = E
+  public typealias ViewType = UITableView
+  /// The buffer object.
+  open fileprivate(set) var buffer: Buffer<E>
+  /// The collection view owning this adapter.
+  open fileprivate(set) weak var view: ViewType?
   /// Right now this only works on a single section of a tableView.
   /// If your tableView has multiple sections, though, you can just use multiple
   /// TableViewDiffAdapter, one per section, and set this value appropriately on each one.
   open var sectionIndex: Int = 0
+  /// The *cellForItemAtIndexPath* block.
+  fileprivate var cellForRowAtIndexPath:
+    ((UITableView, E, IndexPath) -> UITableViewCell)? = nil
 
   public required init(buffer: BufferType, view: ViewType) {
-    guard let buffer = buffer as? Buffer<ElementType> else {
+    guard let buffer = buffer as? Buffer<E> else {
       fatalError()
     }
     self.buffer = buffer
@@ -24,15 +30,12 @@ open class TableViewDiffAdapter<ElementType: Diffable>: NSObject,
     self.buffer.delegate = self
   }
 
-  public required init(initialElements: [ElementType], view: ViewType) {
+  public required init(initialElements: [E], view: ViewType) {
     self.buffer = Buffer(initialArray: initialElements)
     self.view = view
     super.init()
     self.buffer.delegate = self
   }
-
-  fileprivate var cellForRowAtIndexPath:
-    ((UITableView, ElementType, IndexPath) -> UITableViewCell)? = nil
 
   /// Returns the element currently on the front buffer at the given index path.
   open func displayedElement(at index: Int) -> Type {
@@ -49,9 +52,11 @@ open class TableViewDiffAdapter<ElementType: Diffable>: NSObject,
   /// - parameter synchronous: Wether the filter, sorting and diff should be
   /// executed synchronously or not.
   /// - parameter completion: Code that will be executed once the buffer is updated.
-  open func update(with newValues: [ElementType]? = nil,
-                   synchronous: Bool = false,
-                   completion: (() -> Void)? = nil) {
+  open func update(
+    with newValues: [E]? = nil,
+    synchronous: Bool = false,
+    completion: (() -> Void)? = nil
+  ) -> Void {
     self.buffer.update(with: newValues, synchronous: synchronous, completion: completion)
   }
 
@@ -62,28 +67,32 @@ open class TableViewDiffAdapter<ElementType: Diffable>: NSObject,
   /// - parameter cellForRowAtIndexPath: The closure that returns a cell for the
   /// given index path.
   open func useAsDataSource(_ cellForRowAtIndexPath:
-    @escaping (UITableView, ElementType, IndexPath) -> UITableViewCell) {
+    @escaping (UITableView, E, IndexPath) -> UITableViewCell) {
     self.view?.dataSource = self
     self.cellForRowAtIndexPath = cellForRowAtIndexPath
   }
 
   /// Tells the data source to return the number of rows in a given section of a table view.
-  dynamic open func tableView(_ tableView: UITableView,
-                              numberOfRowsInSection section: Int) -> Int {
+  dynamic open func tableView(
+    _ tableView: UITableView,
+    numberOfRowsInSection section: Int
+  ) -> Int {
     return self.buffer.currentElements.count
   }
 
   /// Asks the data source for a cell to insert in a particular location of the table view.
-  open func tableView(_ tableView: UITableView,
-                      cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    return self.cellForRowAtIndexPath!(tableView,
-                                       buffer.currentElements[(indexPath as NSIndexPath).row],
-                                       indexPath)
+  open func tableView(
+    _ tableView: UITableView,
+    cellForRowAt indexPath: IndexPath
+  ) -> UITableViewCell {
+    return self.cellForRowAtIndexPath!(
+      tableView,
+      buffer.currentElements[(indexPath as NSIndexPath).row],
+      indexPath)
   }
 }
 
 extension TableViewDiffAdapter: BufferDelegate {
-
   /// Notifies the receiver that the content is about to change.
   public func buffer(willChangeContent buffer: BufferType) {
     self.view?.beginUpdates()
@@ -107,8 +116,9 @@ extension TableViewDiffAdapter: BufferDelegate {
 
   /// Notifies the receiver that a row got moved.
   public func buffer(didMoveElement buffer: BufferType, from: UInt, to: UInt) {
-    self.view?.moveRow(at: IndexPath(row: Int(from), section: self.sectionIndex),
-                       to: IndexPath(row: Int(to), section: self.sectionIndex))
+    self.view?.moveRow(
+      at: IndexPath(row: Int(from), section: self.sectionIndex),
+      to: IndexPath(row: Int(to), section: self.sectionIndex))
   }
 
   /// Notifies the receiver that the content updates has ended.

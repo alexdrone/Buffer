@@ -1,21 +1,32 @@
 #if os(iOS)
 import UIKit
 
-open class CollectionViewDiffAdapter<ElementType: Diffable>: NSObject,
-                                                             AdapterType,
-                                                             UICollectionViewDataSource {
-  public typealias `Type` = ElementType
-  public typealias ViewType = UICollectionView
-  open fileprivate(set) var buffer: Buffer<ElementType>
-  open fileprivate(set) weak var view: ViewType?
+open class CollectionViewDiffAdapter<E: Diffable>:
+  NSObject,
+  AdapterType,
+  UICollectionViewDataSource {
 
+  public typealias `Type` = E
+  public typealias ViewType = UICollectionView
+  /// The buffer object.
+  open fileprivate(set) var buffer: Buffer<E>
+  /// The collection view owning this adapter.
+  open fileprivate(set) weak var view: ViewType?
   /// Right now this only works on a single section of a collectionView.
   /// If your collectionView has multiple sections, though, you can just use multiple
   /// CollectionViewDiffAdapter, one per section, and set this value appropriately on each one.
   open var sectionIndex: Int = 0
+  /// The indexpaths used for the batch update.
+  fileprivate var indexPaths: (
+    insertion: [IndexPath],
+    deletion: [IndexPath],
+    move: [(IndexPath, IndexPath)] ) = ([], [], [])
+  /// The *cellForItemAtIndexPath* block.
+  fileprivate var cellForItemAtIndexPath:
+    ((UICollectionView, E, IndexPath) -> UICollectionViewCell)? = nil
 
   public required init(buffer: BufferType, view: ViewType) {
-    guard let buffer = buffer as? Buffer<ElementType> else {
+    guard let buffer = buffer as? Buffer<E> else {
       fatalError()
     }
     self.buffer = buffer
@@ -24,22 +35,15 @@ open class CollectionViewDiffAdapter<ElementType: Diffable>: NSObject,
     self.buffer.delegate = self
   }
 
-  public required init(initialElements: [ElementType], view: ViewType) {
+  public required init(initialElements: [E], view: ViewType) {
     self.buffer = Buffer(initialArray: initialElements)
     self.view = view
     super.init()
     self.buffer.delegate = self
   }
 
-  fileprivate var indexPaths: (insertion: [IndexPath],
-                               deletion: [IndexPath],
-                               move: [(IndexPath, IndexPath)] ) = ([], [], [])
-
-  fileprivate var cellForItemAtIndexPath: ((UICollectionView, ElementType, IndexPath)
-    -> UICollectionViewCell)? = nil
-
   /// Returns the element currently on the front buffer at the given index path.
-  open func displayedElement(at index: Int) -> ElementType {
+  open func displayedElement(at index: Int) -> E {
     return self.buffer.currentElements[index]
   }
 
@@ -53,9 +57,11 @@ open class CollectionViewDiffAdapter<ElementType: Diffable>: NSObject,
   /// - parameter synchronous: Wether the filter, sorting and diff should be executed
   /// synchronously or not.
   /// - parameter completion: Code that will be executed once the buffer is updated.
-  open func update(with newValues: [ElementType]? = nil,
-                   synchronous: Bool = false,
-                   completion: (() -> Void)? = nil) {
+  open func update(
+    with newValues: [E]? = nil,
+    synchronous: Bool = false,
+    completion: (() -> Void)? = nil
+  ) -> Void {
     self.buffer.update(with: newValues, synchronous: synchronous, completion: completion)
   }
 
@@ -66,28 +72,32 @@ open class CollectionViewDiffAdapter<ElementType: Diffable>: NSObject,
   /// - parameter cellForRowAtIndexPath: The closure that returns a cell for the given
   /// index path.
   open func useAsDataSource(_ cellForItemAtIndexPath:
-    @escaping (UICollectionView, ElementType, IndexPath) -> UICollectionViewCell) {
+    @escaping (UICollectionView, E, IndexPath) -> UICollectionViewCell) {
     self.view?.dataSource = self
     self.cellForItemAtIndexPath = cellForItemAtIndexPath
   }
 
   /// Tells the data source to return the number of rows in a given section of a table view.
-  open func collectionView(_ collectionView: UICollectionView,
-                             numberOfItemsInSection section: Int) -> Int {
+  open func collectionView(
+    _ collectionView: UICollectionView,
+     numberOfItemsInSection section: Int
+  ) -> Int {
     return self.buffer.currentElements.count
   }
 
   /// Asks the data source for a cell to insert in a particular location of the table view.
-  open func collectionView(_ collectionView: UICollectionView,
-                           cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    return self.cellForItemAtIndexPath!(collectionView,
-                                        buffer.currentElements[(indexPath as NSIndexPath).row],
-                                        indexPath)
+  open func collectionView(
+    _ collectionView: UICollectionView,
+    cellForItemAt indexPath: IndexPath
+  ) -> UICollectionViewCell {
+    return self.cellForItemAtIndexPath!(
+      collectionView,
+      buffer.currentElements[(indexPath as NSIndexPath).row],
+      indexPath)
   }
 }
 
 extension CollectionViewDiffAdapter: BufferDelegate {
-
   /// Notifies the receiver that the content is about to change.
   public func buffer(willChangeContent buffer: BufferType) {
     self.indexPaths = ([], [], [])
@@ -109,8 +119,9 @@ extension CollectionViewDiffAdapter: BufferDelegate {
   
   /// Notifies the receiver that a row got moved.
   public func buffer(didMoveElement buffer: BufferType, from: UInt, to: UInt) {
-    self.indexPaths.move.append((IndexPath(row: Int(from), section: self.sectionIndex),
-                                 IndexPath(row: Int(to), section: self.sectionIndex)))
+    self.indexPaths.move.append((
+      IndexPath(row: Int(from), section: self.sectionIndex),
+      IndexPath(row: Int(to), section: self.sectionIndex)))
   }
 
   /// Notifies the receiver that the content updates has ended.

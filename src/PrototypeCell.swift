@@ -7,19 +7,20 @@ public protocol PrototypeViewCell: ListViewCell {
   /// Apply the model.
   /// - Note: This is used internally from the infra to set the model.
   func applyModel(_ model: Any?)
-
+  /// Constructor.
   init(reuseIdentifier: String)
 }
 
 open class PrototypeTableViewCell : UITableViewCell, PrototypeViewCell {
   /// The wrapped view.
   open var view: UIView!
+  /// The associated model.
   open var model: Any? {
-    didSet {
-      didSetModelClosure?(model)
-    }
+    didSet { didSetModelClosure?(model) }
   }
+  /// The *UICollectionView/UITableView* for this prototype cell.
   open weak var referenceView: ListContainerView?
+  /// Internal state.
   fileprivate var didInitializeCell = false
   fileprivate var didSetModelClosure: ((Any?) -> Void)?
 
@@ -31,11 +32,11 @@ open class PrototypeTableViewCell : UITableViewCell, PrototypeViewCell {
       fatalError("init(coder:) has not been implemented")
   }
 
-  open func initializeCellIfNecessary(_ view: UIView,
-                                        didSetModel: ((Any?) -> Void)? = nil) {
-
+  open func initializeCellIfNecessary(
+    _ view: UIView,
+    didSetModel: ((Any?) -> Void)? = nil
+  ) -> Void {
     assert(Thread.isMainThread)
-
     // make sure this happens just once.
     if self.didInitializeCell { return }
     self.didInitializeCell = true
@@ -73,11 +74,11 @@ open class PrototypeCollectionViewCell: UICollectionViewCell, PrototypeViewCell 
   ///The model for this cell.
   /// - Note: This is propagated to the associted.
   open var model: Any? {
-    didSet {
-      didSetModelClosure?(model)
-    }
+    didSet { didSetModelClosure?(model) }
   }
+  /// The *UICollectionView/UITableView* for this prototype cell.
   weak open var referenceView: ListContainerView?
+  /// Internal state.
   fileprivate var didInitializeCell = false
   fileprivate var didSetModelClosure: ((Any?) -> Void)?
 
@@ -89,13 +90,14 @@ open class PrototypeCollectionViewCell: UICollectionViewCell, PrototypeViewCell 
       fatalError("init(coder:) has not been implemented")
   }
 
-  open func initializeCellIfNecessary(_ view: UIView,
-                                        didSetModel: ((Any?) -> Void)? = nil) {
+  open func initializeCellIfNecessary(
+    _ view: UIView,
+    didSetModel: ((Any?) -> Void)? = nil
+  ) -> Void {
     assert(Thread.isMainThread)
     // make sure this happens just once
     if self.didInitializeCell { return }
     self.didInitializeCell = true
-
     self.view = view
     self.contentView.addSubview(view)
     self.didSetModelClosure = didSetModel
@@ -143,11 +145,9 @@ public struct Prototypes {
     guard let cell = Prototypes.registeredPrototypes[item.reuseIdentifier] else {
       fatalError("Unregistered prototype with reuse identifier \(item.reuseIdentifier).")
     }
-
     cell.applyModel(item.modelRef)
     cell.referenceView = item.referenceView
     item.configure(cell: cell)
-
     if let cell = cell as? UIView {
       return cell.bounds.size
     } else {
