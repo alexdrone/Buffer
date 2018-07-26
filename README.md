@@ -98,15 +98,6 @@ class MyClass: BufferDelegate {
 
 ```
 
-### Tracking Keypaths
-
-If your model is KVO-compliant, you can pass an array of keypaths to your buffer object.
-When one of the observed keypath changes for one of the items managed by your buffer object, the sort and the filter closures are re-applied (on a background thread), the diff is computed and the delegate methods called.
-
-```swift
-buffer.trackKeyPaths([\Foo.foo, \Bar.bar])
-```
-
 ### Built-in UITableView and UICollectionView adapter
 
 One of the main use cases for **Buffer** is probably to apply changes to a TableView or a CollectionView.
