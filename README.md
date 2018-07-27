@@ -1,5 +1,5 @@
 
-# Buffer [![Swift](https://img.shields.io/badge/swift-4.2-orange.svg?style=flat)](#) [![Platform](https://img.shields.io/badge/platform-iOS|macOS-lightgrey.svg?style=flat)](#)[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://opensource.org/licenses/MIT)
+# Buffer [![Swift](https://img.shields.io/badge/swift-4.2-orange.svg?style=flat)](#) [![Platform](https://img.shields.io/badge/platform-iOS|macOS-lightgrey.svg?style=flat)](#) [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://opensource.org/licenses/MIT)
 
 <img src="https://raw.githubusercontent.com/alexdrone/Buffer/master/docs/logo_small.png" width=150 alt="Buffer" align=right />
 
