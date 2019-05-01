@@ -7,7 +7,7 @@ Swift μ-framework for efficient array diffs, collection observation and data so
 
 [C++11 port here](https://github.com/alexdrone/libbuffer)
 
-### Installion
+### Installation
 
 ```bash
 cd {PROJECT_ROOT_DIRECTORY}
