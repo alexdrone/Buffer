@@ -1,16 +1,33 @@
 
-# Buffer [![Swift](https://img.shields.io/badge/swift-4.2-orange.svg?style=flat)](#) [![Platform](https://img.shields.io/badge/platform-iOS|macOS-lightgrey.svg?style=flat)](#) [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://opensource.org/licenses/MIT)
+# Buffer [![Swift](https://img.shields.io/badge/swift-5-orange.svg?style=flat)](#) [![Platform](https://img.shields.io/badge/platform-iOS|macOS-lightgrey.svg?style=flat)](#) [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://opensource.org/licenses/MIT)
 
 <img src="https://raw.githubusercontent.com/alexdrone/Buffer/master/docs/logo_small.png" width=150 alt="Buffer" align=right />
 
 Swift μ-framework for efficient array diffs, collection observation and data source implementation.
 
-[Swift 2.3 branch here](https://github.com/alexdrone/Buffer/tree/swift_2_3)
-
 [C++11 port here](https://github.com/alexdrone/libbuffer)
 
+### Installion
 
-## Installation
+```bash
+cd {PROJECT_ROOT_DIRECTORY}
+curl "https://raw.githubusercontent.com/alexdrone/Buffer/master/bin/dist.zip" > dist.zip && unzip dist.zip && rm dist.zip;
+```
+
+Drag `Buffer.framework` in your project and add it as an embedded binary.
+
+If you use [xcodegen](https://github.com/yonaskolb/XcodeGen) add the framework to your *project.yml* like so:
+
+```yaml
+targets:
+  YOUR_APP_TARGET:
+    ...
+    dependencies:
+      - framework: PATH/TO/YOUR/DEPS/Buffer.framework
+```
+
+## Installation with CocoaPods/Carthage (deprecated)
+
 If you are using **CocoaPods**:
 
 
@@ -88,10 +105,10 @@ class MyClass: BufferDelegate {
 
   public func buffer(didChangeElementAtIndex buffer: BufferType, index: UInt) {
   }
-  
+
   public func buffer(didMoveElement buffer: BufferType, from: UInt, to: UInt) {
   }
-  
+
   public func buffer(didChangeAllContent buffer: BufferType) {
   }
 }
@@ -139,7 +156,7 @@ class MyClass: UITableViewController {
 	  			return cell
     }
   }
-  
+
 }
 
 
