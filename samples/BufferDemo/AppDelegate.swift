@@ -4,6 +4,7 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
   /// The key window.
   var window: UIWindow?
+
   /// Tells the delegate that the launch process is almost done and the app is almost ready to run.
   func application(
     _ application: UIApplication,
@@ -14,4 +15,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
 }
-

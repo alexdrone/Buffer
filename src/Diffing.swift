@@ -16,16 +16,20 @@ public protocol Diffing {
   static func diffing<T: Diffable>(
     oldArray: [T],
     newArray: [T],
-    isEqual: EqualityChecker<T>) -> DiffResultType
+    isEqual: EqualityChecker<T>
+  ) -> DiffResultType
 }
 
 public protocol DiffResultType {
   /// The computed required insert to match the destination array.
   var inserts: IndexSet { get set }
+
   /// The computed required updates to match the destination array.
   var updates: IndexSet { get set }
+
   /// The computed required deletes to match the destination array.
   var deletes: IndexSet { get set }
+
   /// The computed required moves to match the destination array.
   var moves: [MoveIndex] { get set }
 }
@@ -33,6 +37,7 @@ public protocol DiffResultType {
 public struct MoveIndex: Equatable {
   /// The source index.
   public let from: Int
+
   /// The target index.
   public let to: Int
 
@@ -40,6 +45,7 @@ public struct MoveIndex: Equatable {
     self.from = from
     self.to = to
   }
+
   /// Returns *true* only if the two indices are the same.
   public static func == (lhs: MoveIndex, rhs: MoveIndex) -> Bool {
     return lhs.from == rhs.from && lhs.to == rhs.to
@@ -49,15 +55,20 @@ public struct MoveIndex: Equatable {
 public struct DiffResult<H: Hashable>: DiffResultType {
   /// The computed required insert to match the destination array.
   public var inserts = IndexSet()
+
   /// The computed required updates to match the destination array.
   public var updates = IndexSet()
+
   /// The computed required deletes to match the destination array.
   public var deletes = IndexSet()
+
   /// The computed required moves to match the destination array.
-  public var moves = Array<MoveIndex>()
+  public var moves = [MoveIndex]()
+
   /// Internal data.
-  public var oldMap = Dictionary<H, Int>()
-  public var newMap = Dictionary<H, Int>()
+  public var oldMap = [H: Int]()
+
+  public var newMap = [H: Int]()
 
   public func validate<T: Diffable>(_ oldArray: [T], _ newArray: [T]) -> Bool {
     return (oldArray.count + self.inserts.count - self.deletes.count) == newArray.count
@@ -77,6 +88,7 @@ extension DiffResultType {
   public var hasChanges: Bool {
     return inserts.isEmpty && deletes.isEmpty && updates.isEmpty && moves.isEmpty
   }
+
   /// The number of changes.
   public var changeCount: Int {
     return inserts.count + deletes.count + updates.count + moves.count
@@ -89,52 +101,64 @@ public enum Diff: Diffing {
   private struct Stack<T> {
     /// All of the items in the stack.
     var items = [T]()
+
     /// Whether there are any elements in this stack.
     var isEmpty: Bool { return self.items.isEmpty }
+
     /// Adds a new elements to the stack.
     mutating func push(_ item: T) {
       items.append(item)
     }
+
     /// Remove the most recently added element to the stack.
     mutating func pop() -> T {
       return items.removeLast()
     }
   }
+
   /// Used to track data stats while diffing.
   /// We expect to keep a reference of entry, thus its declaration as (final) class.
   private final class Entry {
     /// The number of times the data occurs in the old array
     var oldCounter: Int = 0
+
     /// The number of times the data occurs in the new array
     var newCounter: Int = 0
+
     /// The indexes of the data in the old array
     var oldIndexes: Stack<Int?> = Stack<Int?>()
+
     /// Flag marking if the data has been updated between arrays by equality check
     var updated: Bool = false
+
     /// Returns `true` if the data occur on both sides, `false` otherwise
     var occurOnBothSides: Bool {
       return self.newCounter > 0 && self.oldCounter > 0
     }
+
     func push(new index: Int?) {
       self.newCounter += 1
       self.oldIndexes.push(index)
     }
+
     func push(old index: Int?) {
-      self.oldCounter += 1;
+      self.oldCounter += 1
       self.oldIndexes.push(index)
     }
   }
+
   /// Track both the entry and the algorithm index. Default the index to `nil`
   private struct Record {
     let entry: Entry
     var index: Int?
+
     init(_ entry: Entry) {
       self.entry = entry
       self.index = nil
     }
   }
 
-  private struct OptimizedIdentity<E: Hashable> : Hashable {
+  private struct OptimizedIdentity<E: Hashable>: Hashable {
     let hashValue: Int
     let identity: UnsafePointer<E>
 
@@ -157,7 +181,7 @@ public enum Diff: Diffing {
     isEqual: EqualityChecker<T>
   ) -> DiffResultType {
     // symbol table uses the old/new array `diffIdentifier` as the key and `Entry` as the value
-    var table = Dictionary<OptimizedIdentity<String>, Entry>.init(minimumCapacity: oldArray.count)
+    var table = [OptimizedIdentity: Entry].init(minimumCapacity: oldArray.count)
     let __oldArray = ContiguousArray(oldArray)
     let __newArray = ContiguousArray(newArray)
     // pass 1
@@ -238,26 +262,27 @@ public enum Diff: Diffing {
     }
     //reset and track offsets from inserted items to calculate where items have moved
     runningOffset = 0
-      _ = newRecords.enumerated().map { (i, newRecord) -> Int in
-      let insertOffset = runningOffset
-      if let oldIndex = newRecord.index {
-        // note that an entry can be updated /and/ moved
-        if newRecord.entry.updated {
-          result.updates.insert(oldIndex)
+    _
+      = newRecords.enumerated().map { (i, newRecord) -> Int in
+        let insertOffset = runningOffset
+        if let oldIndex = newRecord.index {
+          // note that an entry can be updated /and/ moved
+          if newRecord.entry.updated {
+            result.updates.insert(oldIndex)
+          }
+          // calculate the offset and determine if there was a move
+          // if the indexes match, ignore the index
+          let deleteOffset = deleteOffsets[oldIndex]
+          if (oldIndex - deleteOffset + insertOffset) != i {
+            result.moves.append(MoveIndex(from: oldIndex, to: i))
+          }
+        } else {  // add to inserts if the opposing index is nil
+          result.inserts.insert(i)
+          runningOffset += 1
         }
-        // calculate the offset and determine if there was a move
-        // if the indexes match, ignore the index
-        let deleteOffset = deleteOffsets[oldIndex]
-        if (oldIndex - deleteOffset + insertOffset) != i {
-          result.moves.append(MoveIndex(from: oldIndex, to: i))
-        }
-      } else { // add to inserts if the opposing index is nil
-        result.inserts.insert(i)
-        runningOffset += 1
+        result.newMap[__newArray[i].diffIdentifier] = i
+        return insertOffset
       }
-      result.newMap[__newArray[i].diffIdentifier] = i
-      return insertOffset
-    }
     assert(result.validate(oldArray, newArray))
     return result
   }
@@ -280,7 +305,5 @@ extension NSString: Diffable {
 extension FloatingPoint {
   public var diffIdentifier: String { return "\(self)" }
 }
-extension Float : Diffable { }
-extension Double : Diffable { }
-
-
+extension Float: Diffable {}
+extension Double: Diffable {}

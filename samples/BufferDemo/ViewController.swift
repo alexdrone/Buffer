@@ -1,13 +1,14 @@
-import UIKit
 import Buffer
+import UIKit
 
-func ==(lhs: FooModel, rhs: FooModel) -> Bool {
+func == (lhs: FooModel, rhs: FooModel) -> Bool {
   return lhs.text == rhs.text
 }
 
 struct FooModel: Diffable {
   /// The identifier used from the diffing algorithm.
   var diffIdentifier: String { return text }
+
   /// Simple text property.
   let text: String
 }
@@ -19,6 +20,7 @@ class ViewController: UIViewController, UITableViewDelegate {
     tableView.delegate = self
     return tableView
   }()
+
   /// Some dummy elements.
   lazy var elements: [ListItem<FooModel>] = {
     var elements = [ListItem<FooModel>]()
@@ -26,7 +28,8 @@ class ViewController: UIViewController, UITableViewDelegate {
       let item = ListItem(
         type: UITableViewCell.self,
         container: self.tableView,
-        model: FooModel(text: ("\(i)"))) { cell, model in cell.textLabel?.text = model.text }
+        model: FooModel(text: ("\(i)"))
+      ) { cell, model in cell.textLabel?.text = model.text }
       elements.append(item)
     }
     return elements
@@ -53,8 +56,3 @@ class ViewController: UIViewController, UITableViewDelegate {
     tableView.elements = newElements
   }
 }
-
-
-
-
-
