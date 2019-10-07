@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:../../Buffer.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "container:">
+      location = "self:Demo.xcodeproj">
    </FileRef>
 </Workspace>

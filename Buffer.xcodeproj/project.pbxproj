@@ -21,10 +21,8 @@
 		BF_617388784096 /* TableViewDiffAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_697572410803 /* TableViewDiffAdapter.swift */; };
 		BF_673047461746 /* PrototypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_761261387751 /* PrototypeCell.swift */; };
 		BF_752354068978 /* Buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = FR_759165212399 /* Buffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BF_760707255053 = {isa = PBXBuildFile; fileRef = FR_629006773661 /* Buffer.framework */; };
 		BF_774605561720 /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_447204625897 /* TableView.swift */; };
 		BF_831725708981 /* AnyListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_629117886697 /* AnyListItem.swift */; };
-		BF_841461687791 = {isa = PBXBuildFile; fileRef = FR_461906688041 /* Buffer.framework */; };
 		BF_864605773899 /* PrototypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_761261387751 /* PrototypeCell.swift */; };
 		BF_964449486626 /* Buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = FR_759165212399 /* Buffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
@@ -144,11 +142,19 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0930;
+				TargetAttributes = {
+					NT_461906688041 = {
+						LastSwiftMigration = 1020;
+					};
+				};
 			};
 			buildConfigurationList = CL_479533117965 /* Build configuration list for PBXProject "Buffer" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
 			mainGroup = G_8448771205358;
 			projectDirPath = "";
 			projectRoot = "";
@@ -247,7 +253,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -336,7 +342,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
